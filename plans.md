@@ -24,13 +24,13 @@ Legend: `[ ]` not started · `[~]` in progress · `[x]` done
 
 Build these once, before any real entity, so every module built afterward follows the same pattern from the start instead of retrofitting it later.
 
-- [ ] 0a.1 `common/entity/BaseEntity.java` — id field, `isNew()`, per master.md §7a.
-- [ ] 0a.2 `common/resources/Constants.java` — status-type strings + `|ENTITY|`-templated messages (start with the ones you know you'll need: LIST/DETAIL/SAVE/UPDATE/DELETE success+failure, EXECUTION_ERROR, PARAMETER_MISSING, INVALID_TOKEN). Add more as later stages need them rather than guessing all of them now.
-- [ ] 0a.3 `common/resources/LogConstants.java` — entity name + action constants, same pattern, start with LEAD/CONTACT/COMPANY/DEAL/TASK/NOTE/ACTIVITY + LIST/ADD/EDIT/DELETE.
-- [ ] 0a.4 `common/resources/ApiStatus.java` — the shared response wrapper (statusType, text, token, total, + one field per entity as entities get built — start with just the scalar fields, add entity fields incrementally per Stage 2 step).
-- [ ] 0a.5 `common/resources/Resources.java` — static helpers: `setStatus(type, text, entity)` with token replacement, `formatedResponse(obj, properties)` using `MappingJacksonValue` + `@JsonFilter`, `getDefaultRequest(request)` for pagination defaults. Confirm with one throwaway controller endpoint that filtering actually restricts the JSON output.
-- [ ] 0a.6 Confirm decision #7 (master.md §11) before this step: thin `@RestControllerAdvice` safety net — build it now (malformed JSON, 404, security-filter auth failures only), not as the primary error path.
-- [ ] 0a.7 Confirm decision #8 (master.md §11) before this step: `common/security/TenantContextService.java` — `getCurrentContext()` returning `{userId, organizationId, role}`, backed by `SecurityContext` per the default assumption in master.md, exposed in the same shape every service method will call.
+- [x] 0a.1 `common/entity/BaseEntity.java` — id field, `isNew()`, per master.md §7a.
+- [x] 0a.2 `common/resources/Constants.java` — status-type strings + `|ENTITY|`-templated messages (start with the ones you know you'll need: LIST/DETAIL/SAVE/UPDATE/DELETE success+failure, EXECUTION_ERROR, PARAMETER_MISSING, INVALID_TOKEN). Add more as later stages need them rather than guessing all of them now.
+- [x] 0a.3 `common/resources/LogConstants.java` — entity name + action constants, same pattern, start with LEAD/CONTACT/COMPANY/DEAL/TASK/NOTE/ACTIVITY + LIST/ADD/EDIT/DELETE.
+- [x] 0a.4 `common/resources/ApiStatus.java` — the shared response wrapper (statusType, text, token, total, + one field per entity as entities get built — start with just the scalar fields, add entity fields incrementally per Stage 2 step).
+- [x] 0a.5 `common/resources/Resources.java` — static helpers: `setStatus(type, text, entity)` with token replacement, `formatedResponse(obj, properties)` using `MappingJacksonValue` + `@JsonFilter`, `getDefaultRequest(request)` for pagination defaults. Confirm with one throwaway controller endpoint that filtering actually restricts the JSON output.
+- [x] 0a.6 Confirm decision #7 (master.md §11) before this step: thin `@RestControllerAdvice` safety net — build it now (malformed JSON body, 404 route not found, security-filter auth failures only), not as the primary error path.
+- [x] 0a.7 Confirm decision #8 (master.md §11) before this step: `common/security/TenantContextService.java` — `getCurrentContext()` returning `{userId, organizationId, role}`, backed by `SecurityContext` per the default assumption in master.md, exposed in the same shape every service method will call.
 
 ## STAGE 1 — Auth & Multi-Tenancy Core
 
