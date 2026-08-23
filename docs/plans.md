@@ -34,21 +34,21 @@ Build these once, before any real entity, so every module built afterward follow
 
 ## STAGE 1 — Auth & Multi-Tenancy Core
 
-- [ ] 1.1 `organizations` + `users` tables via Flyway migration. Fields per master.md §8 (expand fields at this step, not before). Include `is_active`/`is_deleted`/`created_on`/`updated_on` on both, per the soft-delete convention (master.md §11 decision #11).
-- [ ] 1.1a `user_types` table + entity (enum-backed: `ORG_ADMIN`/`SALES_MANAGER`/`SALES_REP`), `users.user_type_id` FK (many-to-one) — mirrors reference's `UserType`. Seed the three rows via migration.
-- [ ] 1.1b `roles` table + entity (enum-backed: `ROLE_ORG_ADMIN`/`ROLE_SALES_MANAGER`/`ROLE_SALES_REP`) + `user_roles` join table (many-to-many) — mirrors reference's `Role`/`ERole`/`user_roles`. Seed the three rows via migration.
-- [ ] 1.2 `POST /auth/register` — creates User + Organization atomically, first user = ORG_ADMIN. Look up and assign both `UserType` and default `Role` the same way reference does (repository lookup by enum name, not a shortcut single-field assignment). Test with curl.
-- [ ] 1.3 Password hashing (BCrypt) wired in.
-- [ ] 1.4 JWT issuing on register/login (access token only, no refresh yet). Confirm token decodes with correct claims (userId, organizationId, role).
-- [ ] 1.5 `POST /auth/login`. Test with curl.
+- [x] 1.1 `organizations` + `users` tables via Flyway migration. Fields per master.md §8 (expand fields at this step, not before). Include `is_active`/`is_deleted`/`created_on`/`updated_on` on both, per the soft-delete convention (master.md §11 decision #11).
+- [x] 1.1a `user_types` table + entity (enum-backed: `ORG_ADMIN`/`SALES_MANAGER`/`SALES_REP`), `users.user_type_id` FK (many-to-one) — mirrors reference's `UserType`. Seed the three rows via migration.
+- [x] 1.1b `roles` table + entity (enum-backed: `ROLE_ORG_ADMIN`/`ROLE_SALES_MANAGER`/`ROLE_SALES_REP`) + `user_roles` join table (many-to-many) — mirrors reference's `Role`/`ERole`/`user_roles`. Seed the three rows via migration.
+- [x] 1.2 `POST /auth/register` — creates User + Organization atomically, first user = ORG_ADMIN. Look up and assign both `UserType` and default `Role` the same way reference does (repository lookup by enum name, not a shortcut single-field assignment). Test with curl.
+- [x] 1.3 Password hashing (BCrypt) wired in.
+- [x] 1.4 JWT issuing on register/login (access token only, no refresh yet). Confirm token decodes with correct claims (userId, organizationId, role).
+- [x] 1.5 `POST /auth/login`. Test with curl.
 - [ ] 1.6 Refresh token: table + `POST /auth/refresh` + rotation on use.
 - [ ] 1.7 Spring Security filter chain wired to validate JWT on protected routes. Confirm a protected test endpoint returns 401 without token, 200 with valid token.
 - [ ] 1.8 **Tenant isolation enforcement mechanism** (master.md rule #1) — build the base repository / Hibernate filter that auto-injects `organization_id`. Prove it with a throwaway test entity before building real entities on top of it. This is the most important step in the whole project — do not skip or rush it.
 - [ ] 1.9 RBAC: role-based method security annotations (`@PreAuthorize`) wired and tested on one dummy endpoint per role.
-- [ ] 1.10 Rework 1.2–1.6 to return `ApiStatus` (not raw DTOs/exceptions) and use `TenantContextService` + `Constants`/`LogConstants` from Stage 0a, so auth module is the first real example of the shared pattern before it's copy-pasted across Stage 2.
-- [ ] 1.11 `user_logs` table + entity (mirrors reference's `UserLog`: `action`, `sub_action`, `created_on`, `updated_on`, `is_active`, `is_deleted`, FK to `users`).
-- [ ] 1.12 `LogService`/`LogServiceImpl` — `logs` (paginated list), `viewLog`, `addLog`, `editLog`, `deleteLog` (soft-delete), and a `createLog(user, action, subAction, createdOn, updatedOn)` helper for other services to call directly — same shape as reference's `LogService`.
-- [ ] 1.13 Wire `logService.createLog(...)` into register/login (`LogConstants.USER` + `SIGN_IN`/`SIGN_UP`-equivalent actions), matching how reference calls it after auth events. This is the pattern every later module's mutating endpoints will follow too (log call right after the `ApiStatus` success branch, not a separate audit step) — confirm this feels right before repeating it across Stage 2, since it's a lot of near-duplicate log calls to write by hand.
+- [x] 1.10 Rework 1.2–1.6 to return `ApiStatus` (not raw DTOs/exceptions) and use `TenantContextService` + `Constants`/`LogConstants` from Stage 0a, so auth module is the first real example of the shared pattern before it's copy-pasted across Stage 2.
+- [x] 1.11 `user_logs` table + entity (mirrors reference's `UserLog`: `action`, `sub_action`, `created_on`, `updated_on`, `is_active`, `is_deleted`, FK to `users`).
+- [x] 1.12 `LogService`/`LogServiceImpl` — `logs` (paginated list), `viewLog`, `addLog`, `editLog`, `deleteLog` (soft-delete), and a `createLog(user, action, subAction, createdOn, updatedOn)` helper for other services to call directly — same shape as reference's `LogService`.
+- [x] 1.13 Wire `logService.createLog(...)` into register/login (`LogConstants.USER` + `SIGN_IN`/`SIGN_UP`-equivalent actions), matching how reference calls it after auth events. This is the pattern every later module's mutating endpoints will follow too (log call right after the `ApiStatus` success branch, not a separate audit step) — confirm this feels right before repeating it across Stage 2, since it's a lot of near-duplicate log calls to write by hand.
 
 ## STAGE 2 — Core CRM Entities (repeat pattern per entity, smallest first)
 

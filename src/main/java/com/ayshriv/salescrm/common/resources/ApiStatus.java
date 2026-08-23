@@ -12,6 +12,10 @@ public class ApiStatus implements Serializable {
     private String text;
     private String token;
     private Long total;
+    private com.ayshriv.salescrm.user.entity.User user;
+    private com.ayshriv.salescrm.organization.entity.Organization organization;
+    private com.ayshriv.salescrm.user.entity.UserLog log;
+    private java.util.List<com.ayshriv.salescrm.user.entity.UserLog> logs;
 
     public ApiStatus() {
     }
@@ -51,5 +55,37 @@ public class ApiStatus implements Serializable {
 
     public void setTotal(Long total) {
         this.total = total;
+    }
+
+    public com.ayshriv.salescrm.user.entity.User getUser() {
+        return user;
+    }
+
+    public void setUser(com.ayshriv.salescrm.user.entity.User user) {
+        this.user = user;
+    }
+
+    public com.ayshriv.salescrm.organization.entity.Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(com.ayshriv.salescrm.organization.entity.Organization organization) {
+        this.organization = organization;
+    }
+
+    public com.ayshriv.salescrm.user.entity.UserLog getLog() {
+        return log;
+    }
+
+    public void setLog(com.ayshriv.salescrm.user.entity.UserLog log) {
+        this.log = log;
+    }
+
+    public java.util.List<com.ayshriv.salescrm.user.entity.UserLog> getLogs() {
+        return logs;
+    }
+
+    public void setLogs(java.util.List<com.ayshriv.salescrm.user.entity.UserLog> logs) {
+        this.logs = logs;
     }
 }
