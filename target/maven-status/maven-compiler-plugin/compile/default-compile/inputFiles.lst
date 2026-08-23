@@ -1,7 +1,11 @@
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\AiSalesCrmAgentApplication.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\auth\controller\AuthController.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\auth\dto\ForgotPasswordRequest.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\auth\dto\LoginRequest.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\auth\dto\RegisterRequest.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\auth\dto\ResendVerificationRequest.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\auth\dto\ResetPasswordRequest.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\auth\dto\VerifyEmailRequest.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\auth\service\AuthService.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\auth\service\impl\AuthServiceImpl.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\common\config\GlobalExceptionHandler.java
@@ -19,9 +23,15 @@ C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\j
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\common\security\TenantContext.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\common\security\TenantContextService.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\common\security\UserPrincipal.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\common\service\EmailService.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\common\service\impl\MockEmailServiceImpl.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\organization\entity\Organization.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\organization\repository\OrganizationRepository.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\user\controller\LogController.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\user\controller\UserController.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\user\dto\UserCreateRequest.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\user\dto\UserSearchRequest.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\user\dto\UserUpdateRequest.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\user\entity\ERole.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\user\entity\EUserType.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\user\entity\Role.java
@@ -33,4 +43,6 @@ C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\j
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\user\repository\UserRepository.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\user\repository\UserTypeRepository.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\user\service\impl\LogServiceImpl.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\user\service\impl\UserServiceImpl.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\user\service\LogService.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\user\service\UserService.java

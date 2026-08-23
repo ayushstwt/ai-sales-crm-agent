@@ -1,0 +1,23 @@
+meta {
+  name: Create Super Admin
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/users
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "superadmin@platform.com",
+    "password": "supersecretpassword",
+    "firstName": "Super",
+    "lastName": "Admin",
+    "phone": "+1-555-0000",
+    "userType": "SUPER_ADMIN",
+    "role": "ROLE_SUPER_ADMIN"
+  }
+}

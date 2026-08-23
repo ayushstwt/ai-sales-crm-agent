@@ -13,6 +13,7 @@ public class ApiStatus implements Serializable {
     private String token;
     private Long total;
     private com.ayshriv.salescrm.user.entity.User user;
+    private java.util.List<com.ayshriv.salescrm.user.entity.User> users;
     private com.ayshriv.salescrm.organization.entity.Organization organization;
     private com.ayshriv.salescrm.user.entity.UserLog log;
     private java.util.List<com.ayshriv.salescrm.user.entity.UserLog> logs;
@@ -63,6 +64,14 @@ public class ApiStatus implements Serializable {
 
     public void setUser(com.ayshriv.salescrm.user.entity.User user) {
         this.user = user;
+    }
+
+    public java.util.List<com.ayshriv.salescrm.user.entity.User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(java.util.List<com.ayshriv.salescrm.user.entity.User> users) {
+        this.users = users;
     }
 
     public com.ayshriv.salescrm.organization.entity.Organization getOrganization() {

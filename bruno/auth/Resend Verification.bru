@@ -1,0 +1,17 @@
+meta {
+  name: Resend Verification
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/auth/resend-verification
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "admin@acme.com"
+  }
+}

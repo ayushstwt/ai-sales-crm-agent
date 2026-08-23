@@ -1,3 +1,4 @@
 com\ayshriv\salescrm\auth\controller\AuthControllerTest.class
 com\ayshriv\salescrm\user\service\LogServiceTest.class
 com\ayshriv\salescrm\AiSalesCrmAgentApplicationTests.class
+com\ayshriv\salescrm\user\controller\UserControllerTest.class

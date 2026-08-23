@@ -21,7 +21,7 @@ import java.util.Set;
 public class User extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organization_id", nullable = false)
+    @JoinColumn(name = "organization_id")
     private Organization organization;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -51,6 +51,23 @@ public class User extends BaseEntity {
 
     @Column(name = "phone")
     private String phone;
+
+    @Column(name = "email_verified", nullable = false)
+    private Boolean emailVerified = false;
+
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    @Column(name = "email_verification_token")
+    private String emailVerificationToken;
+
+    @Column(name = "email_verification_expiry")
+    private LocalDateTime emailVerificationExpiry;
+
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    @Column(name = "password_reset_token")
+    private String passwordResetToken;
+
+    @Column(name = "password_reset_expiry")
+    private LocalDateTime passwordResetExpiry;
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
@@ -156,6 +173,46 @@ public class User extends BaseEntity {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Boolean getEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(Boolean emailVerified) {
+        this.emailVerified = emailVerified;
+    }
+
+    public String getEmailVerificationToken() {
+        return emailVerificationToken;
+    }
+
+    public void setEmailVerificationToken(String emailVerificationToken) {
+        this.emailVerificationToken = emailVerificationToken;
+    }
+
+    public LocalDateTime getEmailVerificationExpiry() {
+        return emailVerificationExpiry;
+    }
+
+    public void setEmailVerificationExpiry(LocalDateTime emailVerificationExpiry) {
+        this.emailVerificationExpiry = emailVerificationExpiry;
+    }
+
+    public String getPasswordResetToken() {
+        return passwordResetToken;
+    }
+
+    public void setPasswordResetToken(String passwordResetToken) {
+        this.passwordResetToken = passwordResetToken;
+    }
+
+    public LocalDateTime getPasswordResetExpiry() {
+        return passwordResetExpiry;
+    }
+
+    public void setPasswordResetExpiry(LocalDateTime passwordResetExpiry) {
+        this.passwordResetExpiry = passwordResetExpiry;
     }
 
     public Boolean getIsActive() {

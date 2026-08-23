@@ -41,6 +41,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final com.ayshriv.salescrm.user.service.LogService logService;
+    private final com.ayshriv.salescrm.common.service.EmailService emailService;
 
     public AuthServiceImpl(
             OrganizationRepository organizationRepository,
@@ -49,7 +50,8 @@ public class AuthServiceImpl implements AuthService {
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder,
             JwtUtils jwtUtils,
-            com.ayshriv.salescrm.user.service.LogService logService
+            com.ayshriv.salescrm.user.service.LogService logService,
+            com.ayshriv.salescrm.common.service.EmailService emailService
     ) {
         this.organizationRepository = organizationRepository;
         this.userRepository = userRepository;
@@ -58,6 +60,7 @@ public class AuthServiceImpl implements AuthService {
         this.passwordEncoder = passwordEncoder;
         this.jwtUtils = jwtUtils;
         this.logService = logService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -114,6 +117,7 @@ public class AuthServiceImpl implements AuthService {
                     });
 
             // 4. Create User
+            String verificationToken = UUID.randomUUID().toString();
             User user = new User();
             user.setOrganization(organization);
             user.setUserType(orgAdminUserType);
@@ -123,9 +127,15 @@ public class AuthServiceImpl implements AuthService {
             user.setFirstName(request.getFirstName() != null ? request.getFirstName().trim() : null);
             user.setLastName(request.getLastName() != null ? request.getLastName().trim() : null);
             user.setPhone(request.getPhone() != null ? request.getPhone().trim() : null);
+            user.setEmailVerified(false);
+            user.setEmailVerificationToken(verificationToken);
+            user.setEmailVerificationExpiry(java.time.LocalDateTime.now().plusHours(24));
             user.setIsActive(true);
             user.setIsDeleted(false);
             user = userRepository.save(user);
+
+            // Send Verification Email
+            emailService.sendVerificationEmail(user.getEmail(), verificationToken);
 
             // 5. Generate JWT Token
             String token = jwtUtils.generateToken(
@@ -182,9 +192,10 @@ public class AuthServiceImpl implements AuthService {
                     .map(r -> r.getName().name())
                     .orElse(ERole.ROLE_SALES_REP.name());
 
+            Long orgId = user.getOrganization() != null ? user.getOrganization().getId() : null;
             String token = jwtUtils.generateToken(
                     user.getId(),
-                    user.getOrganization().getId(),
+                    orgId,
                     user.getEmail(),
                     primaryRole
             );
@@ -200,6 +211,153 @@ public class AuthServiceImpl implements AuthService {
 
         } catch (Exception e) {
             LOGGER.error("AuthService >> login exception: {}", e.getMessage(), e);
+            return Resources.setStatus(Constants.ERROR, Constants.EXECUTION_ERROR + e.getMessage(), null);
+        }
+    }
+
+    @Override
+    @Transactional
+    public ApiStatus verifyEmail(com.ayshriv.salescrm.auth.dto.VerifyEmailRequest request) {
+        LOGGER.info("AuthService >> verifyEmail called!");
+        try {
+            if (request.getToken() == null || request.getToken().trim().isEmpty()) {
+                return Resources.setStatus(Constants.FAILURE, Constants.PARAMETER_MISSING + "token", null);
+            }
+
+            Optional<User> userOptional = userRepository.findByEmailVerificationTokenAndIsDeletedFalse(request.getToken().trim());
+            if (userOptional.isEmpty()) {
+                return Resources.setStatus(Constants.FAILURE, "Invalid or expired verification token.", null);
+            }
+
+            User user = userOptional.get();
+            if (user.getEmailVerificationExpiry() != null && user.getEmailVerificationExpiry().isBefore(java.time.LocalDateTime.now())) {
+                return Resources.setStatus(Constants.FAILURE, "Verification token has expired. Please request a new one.", null);
+            }
+
+            user.setEmailVerified(true);
+            user.setEmailVerificationToken(null);
+            user.setEmailVerificationExpiry(null);
+            user.setUpdatedOn(java.time.LocalDateTime.now());
+            userRepository.save(user);
+
+            logService.createLog(user, com.ayshriv.salescrm.common.resources.LogConstants.USER, "VERIFY_EMAIL", java.time.LocalDateTime.now(), null);
+
+            ApiStatus status = Resources.setStatus(Constants.SUCCESS, "Email verified successfully.", null);
+            status.setUser(user);
+            return status;
+
+        } catch (Exception e) {
+            LOGGER.error("AuthService >> verifyEmail exception: {}", e.getMessage(), e);
+            return Resources.setStatus(Constants.ERROR, Constants.EXECUTION_ERROR + e.getMessage(), null);
+        }
+    }
+
+    @Override
+    @Transactional
+    public ApiStatus resendVerification(com.ayshriv.salescrm.auth.dto.ResendVerificationRequest request) {
+        LOGGER.info("AuthService >> resendVerification called for: {}", request.getEmail());
+        try {
+            if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
+                return Resources.setStatus(Constants.FAILURE, Constants.PARAMETER_MISSING + "email", null);
+            }
+
+            String email = request.getEmail().trim().toLowerCase(Locale.ROOT);
+            Optional<User> userOptional = userRepository.findByEmailAndIsDeletedFalse(email);
+            if (userOptional.isEmpty()) {
+                return Resources.setStatus(Constants.FAILURE, "User with email not found.", null);
+            }
+
+            User user = userOptional.get();
+            if (Boolean.TRUE.equals(user.getEmailVerified())) {
+                return Resources.setStatus(Constants.FAILURE, "Email is already verified.", null);
+            }
+
+            String token = UUID.randomUUID().toString();
+            user.setEmailVerificationToken(token);
+            user.setEmailVerificationExpiry(java.time.LocalDateTime.now().plusHours(24));
+            user.setUpdatedOn(java.time.LocalDateTime.now());
+            userRepository.save(user);
+
+            emailService.sendVerificationEmail(user.getEmail(), token);
+
+            ApiStatus status = Resources.setStatus(Constants.SUCCESS, "Verification email sent successfully.", null);
+            status.setToken(token);
+            return status;
+
+        } catch (Exception e) {
+            LOGGER.error("AuthService >> resendVerification exception: {}", e.getMessage(), e);
+            return Resources.setStatus(Constants.ERROR, Constants.EXECUTION_ERROR + e.getMessage(), null);
+        }
+    }
+
+    @Override
+    @Transactional
+    public ApiStatus forgotPassword(com.ayshriv.salescrm.auth.dto.ForgotPasswordRequest request) {
+        LOGGER.info("AuthService >> forgotPassword called for: {}", request.getEmail());
+        try {
+            if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
+                return Resources.setStatus(Constants.FAILURE, Constants.PARAMETER_MISSING + "email", null);
+            }
+
+            String email = request.getEmail().trim().toLowerCase(Locale.ROOT);
+            Optional<User> userOptional = userRepository.findByEmailAndIsDeletedFalse(email);
+            if (userOptional.isEmpty()) {
+                return Resources.setStatus(Constants.SUCCESS, "If the email is registered, a password reset link has been sent.", null);
+            }
+
+            User user = userOptional.get();
+            String token = UUID.randomUUID().toString();
+            user.setPasswordResetToken(token);
+            user.setPasswordResetExpiry(java.time.LocalDateTime.now().plusHours(2));
+            user.setUpdatedOn(java.time.LocalDateTime.now());
+            userRepository.save(user);
+
+            emailService.sendPasswordResetEmail(user.getEmail(), token);
+
+            ApiStatus status = Resources.setStatus(Constants.SUCCESS, "Password reset email sent successfully.", null);
+            status.setToken(token);
+            return status;
+
+        } catch (Exception e) {
+            LOGGER.error("AuthService >> forgotPassword exception: {}", e.getMessage(), e);
+            return Resources.setStatus(Constants.ERROR, Constants.EXECUTION_ERROR + e.getMessage(), null);
+        }
+    }
+
+    @Override
+    @Transactional
+    public ApiStatus resetPassword(com.ayshriv.salescrm.auth.dto.ResetPasswordRequest request) {
+        LOGGER.info("AuthService >> resetPassword called!");
+        try {
+            if (request.getToken() == null || request.getToken().trim().isEmpty()) {
+                return Resources.setStatus(Constants.FAILURE, Constants.PARAMETER_MISSING + "token", null);
+            }
+            if (request.getNewPassword() == null || request.getNewPassword().trim().isEmpty()) {
+                return Resources.setStatus(Constants.FAILURE, Constants.PARAMETER_MISSING + "newPassword", null);
+            }
+
+            Optional<User> userOptional = userRepository.findByPasswordResetTokenAndIsDeletedFalse(request.getToken().trim());
+            if (userOptional.isEmpty()) {
+                return Resources.setStatus(Constants.FAILURE, "Invalid or expired password reset token.", null);
+            }
+
+            User user = userOptional.get();
+            if (user.getPasswordResetExpiry() != null && user.getPasswordResetExpiry().isBefore(java.time.LocalDateTime.now())) {
+                return Resources.setStatus(Constants.FAILURE, "Password reset token has expired. Please request a new one.", null);
+            }
+
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            user.setPasswordResetToken(null);
+            user.setPasswordResetExpiry(null);
+            user.setUpdatedOn(java.time.LocalDateTime.now());
+            userRepository.save(user);
+
+            logService.createLog(user, com.ayshriv.salescrm.common.resources.LogConstants.USER, "RESET_PASSWORD", java.time.LocalDateTime.now(), null);
+
+            return Resources.setStatus(Constants.SUCCESS, "Password has been reset successfully.", null);
+
+        } catch (Exception e) {
+            LOGGER.error("AuthService >> resetPassword exception: {}", e.getMessage(), e);
             return Resources.setStatus(Constants.ERROR, Constants.EXECUTION_ERROR + e.getMessage(), null);
         }
     }

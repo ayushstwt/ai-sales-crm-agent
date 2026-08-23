@@ -1,0 +1,29 @@
+meta {
+  name: Register Organization & User
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "organizationName": "Acme Corp",
+    "organizationSlug": "acme-corp",
+    "email": "admin@acme.com",
+    "password": "password123",
+    "firstName": "John",
+    "lastName": "Doe",
+    "phone": "+1-555-0100"
+  }
+}
+
+script:post-response {
+  if (res.body && res.body.token) {
+    bru.setEnvVar("token", res.body.token);
+  }
+}

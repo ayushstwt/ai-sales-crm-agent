@@ -1,0 +1,23 @@
+meta {
+  name: Create User
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/users
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "rep@acme.com",
+    "password": "password123",
+    "firstName": "Alex",
+    "lastName": "Morgan",
+    "phone": "+1-555-0199",
+    "userType": "SALES_REP",
+    "role": "ROLE_SALES_REP"
+  }
+}

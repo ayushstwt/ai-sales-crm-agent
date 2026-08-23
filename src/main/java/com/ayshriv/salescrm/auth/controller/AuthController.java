@@ -34,4 +34,28 @@ public class AuthController {
         ApiStatus status = authService.login(request);
         return ResponseEntity.ok(Resources.formatedResponse(status, "statusType", "text", "token", "user", "organization"));
     }
+
+    @PostMapping("/verify-email")
+    public ResponseEntity<MappingJacksonValue> verifyEmail(@Valid @RequestBody com.ayshriv.salescrm.auth.dto.VerifyEmailRequest request) {
+        ApiStatus status = authService.verifyEmail(request);
+        return ResponseEntity.ok(Resources.formatedResponse(status, "statusType", "text", "user"));
+    }
+
+    @PostMapping("/resend-verification")
+    public ResponseEntity<MappingJacksonValue> resendVerification(@Valid @RequestBody com.ayshriv.salescrm.auth.dto.ResendVerificationRequest request) {
+        ApiStatus status = authService.resendVerification(request);
+        return ResponseEntity.ok(Resources.formatedResponse(status, "statusType", "text", "token"));
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<MappingJacksonValue> forgotPassword(@Valid @RequestBody com.ayshriv.salescrm.auth.dto.ForgotPasswordRequest request) {
+        ApiStatus status = authService.forgotPassword(request);
+        return ResponseEntity.ok(Resources.formatedResponse(status, "statusType", "text", "token"));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<MappingJacksonValue> resetPassword(@Valid @RequestBody com.ayshriv.salescrm.auth.dto.ResetPasswordRequest request) {
+        ApiStatus status = authService.resetPassword(request);
+        return ResponseEntity.ok(Resources.formatedResponse(status, "statusType", "text"));
+    }
 }

@@ -179,4 +179,80 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.statusType").value(Constants.FAILURE))
                 .andExpect(jsonPath("$.text").value("Invalid email or password."));
     }
+
+    @Test
+    void testVerifyEmailAndResend() throws Exception {
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setOrganizationName("Acme Corp");
+        registerRequest.setEmail("verify@acme.com");
+        registerRequest.setPassword("password123");
+
+        mockMvc.perform(post("/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(registerRequest)))
+                .andExpect(status().isOk());
+
+        User user = userRepository.findByEmail("verify@acme.com").orElseThrow();
+        assertThat(user.getEmailVerified()).isFalse();
+        String token = user.getEmailVerificationToken();
+        assertThat(token).isNotNull();
+
+        // Verify Email
+        mockMvc.perform(post("/auth/verify-email")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new com.ayshriv.salescrm.auth.dto.VerifyEmailRequest(token))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusType").value(Constants.SUCCESS));
+
+        User verifiedUser = userRepository.findByEmail("verify@acme.com").orElseThrow();
+        assertThat(verifiedUser.getEmailVerified()).isTrue();
+        assertThat(verifiedUser.getEmailVerificationToken()).isNull();
+
+        // Resend on already verified returns failure
+        mockMvc.perform(post("/auth/resend-verification")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new com.ayshriv.salescrm.auth.dto.ResendVerificationRequest("verify@acme.com"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusType").value(Constants.FAILURE));
+    }
+
+    @Test
+    void testForgotAndResetPassword() throws Exception {
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.setOrganizationName("Acme Corp");
+        registerRequest.setEmail("reset@acme.com");
+        registerRequest.setPassword("oldpassword123");
+
+        mockMvc.perform(post("/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(registerRequest)))
+                .andExpect(status().isOk());
+
+        // Forgot password
+        MvcResult forgotResult = mockMvc.perform(post("/auth/forgot-password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new com.ayshriv.salescrm.auth.dto.ForgotPasswordRequest("reset@acme.com"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusType").value(Constants.SUCCESS))
+                .andReturn();
+
+        User user = userRepository.findByEmail("reset@acme.com").orElseThrow();
+        String resetToken = user.getPasswordResetToken();
+        assertThat(resetToken).isNotNull();
+
+        // Reset password
+        mockMvc.perform(post("/auth/reset-password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new com.ayshriv.salescrm.auth.dto.ResetPasswordRequest(resetToken, "newpassword123"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusType").value(Constants.SUCCESS));
+
+        // Login with new password
+        LoginRequest loginRequest = new LoginRequest("reset@acme.com", "newpassword123");
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusType").value(Constants.SUCCESS));
+    }
 }

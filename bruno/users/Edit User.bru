@@ -1,0 +1,22 @@
+meta {
+  name: Edit User
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/users/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "firstName": "Alexander",
+    "lastName": "Morgan",
+    "phone": "+1-555-9999",
+    "userType": "SALES_MANAGER",
+    "role": "ROLE_SALES_MANAGER",
+    "isActive": true
+  }
+}
