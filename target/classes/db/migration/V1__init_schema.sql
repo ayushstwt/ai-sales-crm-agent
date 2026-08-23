@@ -1,0 +1,2 @@
+-- Baseline migration for AI Sales CRM Agent
+-- Initial schema definitions will be added in Stage 1
