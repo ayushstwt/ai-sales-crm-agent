@@ -1,6 +1,7 @@
 com\ayshriv\salescrm\user\repository\UserRepository.class
 com\ayshriv\salescrm\company\dto\CompanySearchRequest.class
 com\ayshriv\salescrm\common\resources\Constants.class
+com\ayshriv\salescrm\audit\entity\AuditSource.class
 com\ayshriv\salescrm\user\controller\LogController.class
 com\ayshriv\salescrm\contact\dto\ContactSearchRequest.class
 com\ayshriv\salescrm\auth\dto\LoginRequest.class
@@ -11,6 +12,7 @@ com\ayshriv\salescrm\common\config\JacksonConfig.class
 com\ayshriv\salescrm\common\config\GlobalExceptionHandler.class
 com\ayshriv\salescrm\user\service\UserService.class
 com\ayshriv\salescrm\common\config\SecurityConfig.class
+com\ayshriv\salescrm\audit\dto\AuditLogSearchRequest.class
 com\ayshriv\salescrm\contact\repository\ContactRepository.class
 com\ayshriv\salescrm\company\service\CompanyService.class
 com\ayshriv\salescrm\common\entity\BaseEntity.class
@@ -46,6 +48,7 @@ com\ayshriv\salescrm\company\controller\CompanyController.class
 com\ayshriv\salescrm\user\entity\UserLog.class
 com\ayshriv\salescrm\auth\dto\RegisterRequest.class
 com\ayshriv\salescrm\pipeline\dto\PipelineStageCreateRequest.class
+com\ayshriv\salescrm\audit\controller\AuditLogController.class
 com\ayshriv\salescrm\lead\entity\LeadStatus.class
 com\ayshriv\salescrm\lead\controller\LeadController.class
 com\ayshriv\salescrm\company\dto\CompanyCreateRequest.class
@@ -70,6 +73,7 @@ com\ayshriv\salescrm\common\security\TenantContextService.class
 com\ayshriv\salescrm\user\entity\ERole.class
 com\ayshriv\salescrm\deal\dto\DealMoveStageRequest.class
 com\ayshriv\salescrm\user\service\LogService.class
+com\ayshriv\salescrm\audit\service\AuditLogService.class
 com\ayshriv\salescrm\contact\service\impl\ContactServiceImpl.class
 com\ayshriv\salescrm\lead\dto\LeadCreateRequest.class
 com\ayshriv\salescrm\auth\dto\ResetPasswordRequest.class
@@ -78,13 +82,16 @@ com\ayshriv\salescrm\pipeline\entity\Pipeline.class
 com\ayshriv\salescrm\common\resources\ApiStatus.class
 com\ayshriv\salescrm\lead\entity\Lead.class
 com\ayshriv\salescrm\user\entity\EUserType.class
+com\ayshriv\salescrm\audit\service\impl\AuditLogServiceImpl.class
 com\ayshriv\salescrm\company\repository\CompanyRepository.class
+com\ayshriv\salescrm\audit\entity\AuditLog.class
 com\ayshriv\salescrm\pipeline\dto\PipelineSearchRequest.class
 com\ayshriv\salescrm\deal\repository\DealRepository.class
 com\ayshriv\salescrm\common\security\TenantContext.class
 com\ayshriv\salescrm\pipeline\dto\PipelineStageUpdateRequest.class
 com\ayshriv\salescrm\deal\dto\DealUpdateRequest.class
 com\ayshriv\salescrm\common\security\JwtUtils.class
+com\ayshriv\salescrm\audit\repository\AuditLogRepository.class
 com\ayshriv\salescrm\company\dto\CompanyUpdateRequest.class
 com\ayshriv\salescrm\lead\service\LeadService.class
 com\ayshriv\salescrm\deal\service\impl\DealServiceImpl.class

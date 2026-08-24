@@ -29,6 +29,8 @@ public class ApiStatus implements Serializable {
     private java.util.List<com.ayshriv.salescrm.pipeline.entity.PipelineStage> pipelineStages;
     private com.ayshriv.salescrm.deal.entity.Deal deal;
     private java.util.List<com.ayshriv.salescrm.deal.entity.Deal> deals;
+    private com.ayshriv.salescrm.audit.entity.AuditLog auditLog;
+    private java.util.List<com.ayshriv.salescrm.audit.entity.AuditLog> auditLogs;
 
     public ApiStatus() {
     }
@@ -204,5 +206,21 @@ public class ApiStatus implements Serializable {
 
     public void setDeals(java.util.List<com.ayshriv.salescrm.deal.entity.Deal> deals) {
         this.deals = deals;
+    }
+
+    public com.ayshriv.salescrm.audit.entity.AuditLog getAuditLog() {
+        return auditLog;
+    }
+
+    public void setAuditLog(com.ayshriv.salescrm.audit.entity.AuditLog auditLog) {
+        this.auditLog = auditLog;
+    }
+
+    public java.util.List<com.ayshriv.salescrm.audit.entity.AuditLog> getAuditLogs() {
+        return auditLogs;
+    }
+
+    public void setAuditLogs(java.util.List<com.ayshriv.salescrm.audit.entity.AuditLog> auditLogs) {
+        this.auditLogs = auditLogs;
     }
 }

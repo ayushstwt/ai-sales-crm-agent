@@ -14,6 +14,7 @@ public class LogConstants {
     public static final String LOG = "LOG";
     public static final String PIPELINE = "PIPELINE";
     public static final String PIPELINE_STAGE = "PIPELINE_STAGE";
+    public static final String AUDIT_LOG = "AUDIT_LOG";
 
     // Actions
     public static final String LIST = "LIST";

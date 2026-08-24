@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .accessDeniedHandler(customAccessDeniedHandler())
             )
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**", "/logs/**", "/users/**", "/companies/**", "/contacts/**", "/leads/**", "/pipelines/**", "/deals/**", "/api/test/**").permitAll()
+                .requestMatchers("/auth/**", "/logs/**", "/users/**", "/companies/**", "/contacts/**", "/leads/**", "/pipelines/**", "/deals/**", "/audit-logs/**", "/api/test/**").permitAll()
                 .anyRequest().authenticated()
             );
         return http.build();

@@ -1,5 +1,7 @@
 package com.ayshriv.salescrm.company.service.impl;
 
+import com.ayshriv.salescrm.audit.entity.AuditSource;
+import com.ayshriv.salescrm.audit.service.AuditLogService;
 import com.ayshriv.salescrm.common.resources.ApiStatus;
 import com.ayshriv.salescrm.common.resources.Constants;
 import com.ayshriv.salescrm.common.resources.LogConstants;
@@ -39,19 +41,22 @@ public class CompanyServiceImpl implements CompanyService {
     private final UserRepository userRepository;
     private final TenantContextService tenantContextService;
     private final LogService logService;
+    private final AuditLogService auditLogService;
 
     public CompanyServiceImpl(
             CompanyRepository companyRepository,
             OrganizationRepository organizationRepository,
             UserRepository userRepository,
             TenantContextService tenantContextService,
-            LogService logService
+            LogService logService,
+            AuditLogService auditLogService
     ) {
         this.companyRepository = companyRepository;
         this.organizationRepository = organizationRepository;
         this.userRepository = userRepository;
         this.tenantContextService = tenantContextService;
         this.logService = logService;
+        this.auditLogService = auditLogService;
     }
 
     @Override
@@ -173,6 +178,7 @@ public class CompanyServiceImpl implements CompanyService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.COMPANY, LogConstants.ADD, LocalDateTime.now(), null);
+            auditLogService.logAction(savedCompany.getOrganization(), currentUser, LogConstants.COMPANY, savedCompany.getId(), LogConstants.ADD, AuditSource.API, "Created company: " + savedCompany.getName());
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, Constants.SAVE_SUCCESS, LogConstants.COMPANY);
             status.setCompany(savedCompany);
@@ -249,6 +255,7 @@ public class CompanyServiceImpl implements CompanyService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.COMPANY, LogConstants.EDIT, LocalDateTime.now(), null);
+            auditLogService.logAction(updatedCompany.getOrganization(), currentUser, LogConstants.COMPANY, updatedCompany.getId(), LogConstants.EDIT, AuditSource.API, "Updated company: " + updatedCompany.getName());
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, Constants.UPDATE_SUCCESS, LogConstants.COMPANY);
             status.setCompany(updatedCompany);
@@ -288,6 +295,7 @@ public class CompanyServiceImpl implements CompanyService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.COMPANY, LogConstants.DELETE, LocalDateTime.now(), null);
+            auditLogService.logAction(company.getOrganization(), currentUser, LogConstants.COMPANY, company.getId(), LogConstants.DELETE, AuditSource.API, "Soft-deleted company: " + company.getName());
 
             return Resources.setStatus(Constants.SUCCESS, Constants.DELETE_SUCCESS, LogConstants.COMPANY);
 

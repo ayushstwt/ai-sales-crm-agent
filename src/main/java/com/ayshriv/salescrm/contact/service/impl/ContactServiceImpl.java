@@ -1,5 +1,7 @@
 package com.ayshriv.salescrm.contact.service.impl;
 
+import com.ayshriv.salescrm.audit.entity.AuditSource;
+import com.ayshriv.salescrm.audit.service.AuditLogService;
 import com.ayshriv.salescrm.common.resources.ApiStatus;
 import com.ayshriv.salescrm.common.resources.Constants;
 import com.ayshriv.salescrm.common.resources.LogConstants;
@@ -42,6 +44,7 @@ public class ContactServiceImpl implements ContactService {
     private final UserRepository userRepository;
     private final TenantContextService tenantContextService;
     private final LogService logService;
+    private final AuditLogService auditLogService;
 
     public ContactServiceImpl(
             ContactRepository contactRepository,
@@ -49,7 +52,8 @@ public class ContactServiceImpl implements ContactService {
             CompanyRepository companyRepository,
             UserRepository userRepository,
             TenantContextService tenantContextService,
-            LogService logService
+            LogService logService,
+            AuditLogService auditLogService
     ) {
         this.contactRepository = contactRepository;
         this.organizationRepository = organizationRepository;
@@ -57,6 +61,7 @@ public class ContactServiceImpl implements ContactService {
         this.userRepository = userRepository;
         this.tenantContextService = tenantContextService;
         this.logService = logService;
+        this.auditLogService = auditLogService;
     }
 
     @Override
@@ -180,6 +185,7 @@ public class ContactServiceImpl implements ContactService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.CONTACT, LogConstants.ADD, LocalDateTime.now(), null);
+            auditLogService.logAction(savedContact.getOrganization(), currentUser, LogConstants.CONTACT, savedContact.getId(), LogConstants.ADD, AuditSource.API, "Created contact: " + savedContact.getFirstName() + " " + (savedContact.getLastName() != null ? savedContact.getLastName() : ""));
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, Constants.SAVE_SUCCESS, LogConstants.CONTACT);
             status.setContact(savedContact);
@@ -248,6 +254,7 @@ public class ContactServiceImpl implements ContactService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.CONTACT, LogConstants.EDIT, LocalDateTime.now(), null);
+            auditLogService.logAction(updatedContact.getOrganization(), currentUser, LogConstants.CONTACT, updatedContact.getId(), LogConstants.EDIT, AuditSource.API, "Updated contact: " + updatedContact.getFirstName() + " " + (updatedContact.getLastName() != null ? updatedContact.getLastName() : ""));
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, Constants.UPDATE_SUCCESS, LogConstants.CONTACT);
             status.setContact(updatedContact);
@@ -287,6 +294,7 @@ public class ContactServiceImpl implements ContactService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.CONTACT, LogConstants.DELETE, LocalDateTime.now(), null);
+            auditLogService.logAction(contact.getOrganization(), currentUser, LogConstants.CONTACT, contact.getId(), LogConstants.DELETE, AuditSource.API, "Soft-deleted contact: " + contact.getFirstName() + " " + (contact.getLastName() != null ? contact.getLastName() : ""));
 
             return Resources.setStatus(Constants.SUCCESS, Constants.DELETE_SUCCESS, LogConstants.CONTACT);
 

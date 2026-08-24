@@ -68,9 +68,9 @@ Do these one at a time, each fully CRUD + tested before starting the next. **Eve
 
 ## STAGE 3 — Audit Log (do this before AI, so AI actions are covered from day one)
 
-- [ ] 3.1 `audit_logs` table + write-path helper (source: MANUAL/AI/API/SYSTEM).
-- [ ] 3.2 Wire audit logging into every mutating endpoint built so far (leads, deals, contacts, companies, tasks, notes, stage-move).
-- [ ] 3.3 `GET /audit-logs` (paginated, org-scoped) to visually confirm entries are landing correctly.
+- [x] 3.1 `audit_logs` table + write-path helper (source: MANUAL/AI/API/SYSTEM).
+- [x] 3.2 Wire audit logging into every mutating endpoint built so far (leads, deals, contacts, companies, tasks, notes, stage-move).
+- [x] 3.3 `GET /audit-logs` (paginated, org-scoped) to visually confirm entries are landing correctly.
 
 ## STAGE 4 — Customer 360 (pure CRM, no AI yet)
 

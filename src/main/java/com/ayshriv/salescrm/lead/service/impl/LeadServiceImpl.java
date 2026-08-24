@@ -1,5 +1,7 @@
 package com.ayshriv.salescrm.lead.service.impl;
 
+import com.ayshriv.salescrm.audit.entity.AuditSource;
+import com.ayshriv.salescrm.audit.service.AuditLogService;
 import com.ayshriv.salescrm.common.resources.ApiStatus;
 import com.ayshriv.salescrm.common.resources.Constants;
 import com.ayshriv.salescrm.common.resources.LogConstants;
@@ -59,6 +61,7 @@ public class LeadServiceImpl implements LeadService {
     private final UserRepository userRepository;
     private final TenantContextService tenantContextService;
     private final LogService logService;
+    private final AuditLogService auditLogService;
 
     public LeadServiceImpl(
             LeadRepository leadRepository,
@@ -70,7 +73,8 @@ public class LeadServiceImpl implements LeadService {
             PipelineStageRepository pipelineStageRepository,
             UserRepository userRepository,
             TenantContextService tenantContextService,
-            LogService logService
+            LogService logService,
+            AuditLogService auditLogService
     ) {
         this.leadRepository = leadRepository;
         this.organizationRepository = organizationRepository;
@@ -82,6 +86,7 @@ public class LeadServiceImpl implements LeadService {
         this.userRepository = userRepository;
         this.tenantContextService = tenantContextService;
         this.logService = logService;
+        this.auditLogService = auditLogService;
     }
 
     @Override
@@ -211,6 +216,7 @@ public class LeadServiceImpl implements LeadService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.LEAD, LogConstants.ADD, LocalDateTime.now(), null);
+            auditLogService.logAction(savedLead.getOrganization(), currentUser, LogConstants.LEAD, savedLead.getId(), LogConstants.ADD, AuditSource.API, "Created lead: " + savedLead.getFirstName() + " " + (savedLead.getLastName() != null ? savedLead.getLastName() : ""));
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, Constants.SAVE_SUCCESS, LogConstants.LEAD);
             status.setLead(savedLead);
@@ -291,6 +297,7 @@ public class LeadServiceImpl implements LeadService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.LEAD, LogConstants.EDIT, LocalDateTime.now(), null);
+            auditLogService.logAction(updatedLead.getOrganization(), currentUser, LogConstants.LEAD, updatedLead.getId(), LogConstants.EDIT, AuditSource.API, "Updated lead: " + updatedLead.getFirstName() + " " + (updatedLead.getLastName() != null ? updatedLead.getLastName() : ""));
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, Constants.UPDATE_SUCCESS, LogConstants.LEAD);
             status.setLead(updatedLead);
@@ -330,6 +337,7 @@ public class LeadServiceImpl implements LeadService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.LEAD, LogConstants.DELETE, LocalDateTime.now(), null);
+            auditLogService.logAction(lead.getOrganization(), currentUser, LogConstants.LEAD, lead.getId(), LogConstants.DELETE, AuditSource.API, "Soft-deleted lead: " + lead.getFirstName() + " " + (lead.getLastName() != null ? lead.getLastName() : ""));
 
             return Resources.setStatus(Constants.SUCCESS, Constants.DELETE_SUCCESS, LogConstants.LEAD);
 
@@ -447,6 +455,7 @@ public class LeadServiceImpl implements LeadService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.LEAD, LogConstants.CONVERT, LocalDateTime.now(), null);
+            auditLogService.logAction(org, currentUser, LogConstants.LEAD, updatedLead.getId(), LogConstants.CONVERT, AuditSource.API, "Converted lead to contact: " + savedContact.getId() + ", company: " + (company != null ? company.getId() : "none") + ", deal: " + (savedDeal != null ? savedDeal.getId() : "none"));
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, "Lead converted successfully.", LogConstants.LEAD);
             status.setLead(updatedLead);

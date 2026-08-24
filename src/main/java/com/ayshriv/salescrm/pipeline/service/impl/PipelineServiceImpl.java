@@ -1,5 +1,7 @@
 package com.ayshriv.salescrm.pipeline.service.impl;
 
+import com.ayshriv.salescrm.audit.entity.AuditSource;
+import com.ayshriv.salescrm.audit.service.AuditLogService;
 import com.ayshriv.salescrm.common.resources.ApiStatus;
 import com.ayshriv.salescrm.common.resources.Constants;
 import com.ayshriv.salescrm.common.resources.LogConstants;
@@ -46,6 +48,7 @@ public class PipelineServiceImpl implements PipelineService {
     private final UserRepository userRepository;
     private final TenantContextService tenantContextService;
     private final LogService logService;
+    private final AuditLogService auditLogService;
 
     public PipelineServiceImpl(
             PipelineRepository pipelineRepository,
@@ -53,7 +56,8 @@ public class PipelineServiceImpl implements PipelineService {
             OrganizationRepository organizationRepository,
             UserRepository userRepository,
             TenantContextService tenantContextService,
-            LogService logService
+            LogService logService,
+            AuditLogService auditLogService
     ) {
         this.pipelineRepository = pipelineRepository;
         this.pipelineStageRepository = pipelineStageRepository;
@@ -61,6 +65,7 @@ public class PipelineServiceImpl implements PipelineService {
         this.userRepository = userRepository;
         this.tenantContextService = tenantContextService;
         this.logService = logService;
+        this.auditLogService = auditLogService;
     }
 
     @Override
@@ -196,6 +201,7 @@ public class PipelineServiceImpl implements PipelineService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.PIPELINE, LogConstants.ADD, LocalDateTime.now(), null);
+            auditLogService.logAction(savedPipeline.getOrganization(), currentUser, LogConstants.PIPELINE, savedPipeline.getId(), LogConstants.ADD, AuditSource.API, "Created pipeline: " + savedPipeline.getName());
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, Constants.SAVE_SUCCESS, LogConstants.PIPELINE);
             status.setPipeline(savedPipeline);
@@ -245,6 +251,7 @@ public class PipelineServiceImpl implements PipelineService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.PIPELINE, LogConstants.EDIT, LocalDateTime.now(), null);
+            auditLogService.logAction(updatedPipeline.getOrganization(), currentUser, LogConstants.PIPELINE, updatedPipeline.getId(), LogConstants.EDIT, AuditSource.API, "Updated pipeline: " + updatedPipeline.getName());
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, Constants.UPDATE_SUCCESS, LogConstants.PIPELINE);
             status.setPipeline(updatedPipeline);
@@ -284,6 +291,7 @@ public class PipelineServiceImpl implements PipelineService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.PIPELINE, LogConstants.DELETE, LocalDateTime.now(), null);
+            auditLogService.logAction(pipeline.getOrganization(), currentUser, LogConstants.PIPELINE, pipeline.getId(), LogConstants.DELETE, AuditSource.API, "Soft-deleted pipeline: " + pipeline.getName());
 
             return Resources.setStatus(Constants.SUCCESS, Constants.DELETE_SUCCESS, LogConstants.PIPELINE);
 
@@ -320,6 +328,7 @@ public class PipelineServiceImpl implements PipelineService {
 
             User currentUser = resolveCurrentUser(tenantContextService.getCurrentContext());
             logService.createLog(currentUser, LogConstants.PIPELINE_STAGE, LogConstants.ADD, LocalDateTime.now(), null);
+            auditLogService.logAction(pipeline.getOrganization(), currentUser, LogConstants.PIPELINE_STAGE, savedStage.getId(), LogConstants.ADD, AuditSource.API, "Added stage " + savedStage.getName() + " to pipeline " + pipeline.getName());
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, Constants.SAVE_SUCCESS, LogConstants.PIPELINE_STAGE);
             status.setPipelineStage(savedStage);
@@ -364,6 +373,7 @@ public class PipelineServiceImpl implements PipelineService {
 
             User currentUser = resolveCurrentUser(tenantContextService.getCurrentContext());
             logService.createLog(currentUser, LogConstants.PIPELINE_STAGE, LogConstants.EDIT, LocalDateTime.now(), null);
+            auditLogService.logAction(stage.getPipeline().getOrganization(), currentUser, LogConstants.PIPELINE_STAGE, updatedStage.getId(), LogConstants.EDIT, AuditSource.API, "Updated stage: " + updatedStage.getName());
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, Constants.UPDATE_SUCCESS, LogConstants.PIPELINE_STAGE);
             status.setPipelineStage(updatedStage);
@@ -396,6 +406,7 @@ public class PipelineServiceImpl implements PipelineService {
 
             User currentUser = resolveCurrentUser(tenantContextService.getCurrentContext());
             logService.createLog(currentUser, LogConstants.PIPELINE_STAGE, LogConstants.DELETE, LocalDateTime.now(), null);
+            auditLogService.logAction(stage.getPipeline().getOrganization(), currentUser, LogConstants.PIPELINE_STAGE, stage.getId(), LogConstants.DELETE, AuditSource.API, "Soft-deleted stage: " + stage.getName());
 
             return Resources.setStatus(Constants.SUCCESS, Constants.DELETE_SUCCESS, LogConstants.PIPELINE_STAGE);
 

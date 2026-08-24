@@ -1,5 +1,7 @@
 package com.ayshriv.salescrm.deal.service.impl;
 
+import com.ayshriv.salescrm.audit.entity.AuditSource;
+import com.ayshriv.salescrm.audit.service.AuditLogService;
 import com.ayshriv.salescrm.common.resources.ApiStatus;
 import com.ayshriv.salescrm.common.resources.Constants;
 import com.ayshriv.salescrm.common.resources.LogConstants;
@@ -51,6 +53,7 @@ public class DealServiceImpl implements DealService {
     private final UserRepository userRepository;
     private final TenantContextService tenantContextService;
     private final LogService logService;
+    private final AuditLogService auditLogService;
 
     public DealServiceImpl(
             DealRepository dealRepository,
@@ -60,7 +63,8 @@ public class DealServiceImpl implements DealService {
             PipelineStageRepository pipelineStageRepository,
             UserRepository userRepository,
             TenantContextService tenantContextService,
-            LogService logService
+            LogService logService,
+            AuditLogService auditLogService
     ) {
         this.dealRepository = dealRepository;
         this.organizationRepository = organizationRepository;
@@ -70,6 +74,7 @@ public class DealServiceImpl implements DealService {
         this.userRepository = userRepository;
         this.tenantContextService = tenantContextService;
         this.logService = logService;
+        this.auditLogService = auditLogService;
     }
 
     @Override
@@ -209,6 +214,7 @@ public class DealServiceImpl implements DealService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.DEAL, LogConstants.ADD, LocalDateTime.now(), null);
+            auditLogService.logAction(savedDeal.getOrganization(), currentUser, LogConstants.DEAL, savedDeal.getId(), LogConstants.ADD, AuditSource.API, "Created deal: " + savedDeal.getTitle() + " (Amount: " + savedDeal.getAmount() + ")");
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, Constants.SAVE_SUCCESS, LogConstants.DEAL);
             status.setDeal(savedDeal);
@@ -283,6 +289,7 @@ public class DealServiceImpl implements DealService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.DEAL, LogConstants.EDIT, LocalDateTime.now(), null);
+            auditLogService.logAction(updatedDeal.getOrganization(), currentUser, LogConstants.DEAL, updatedDeal.getId(), LogConstants.EDIT, AuditSource.API, "Updated deal: " + updatedDeal.getTitle());
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, Constants.UPDATE_SUCCESS, LogConstants.DEAL);
             status.setDeal(updatedDeal);
@@ -322,6 +329,7 @@ public class DealServiceImpl implements DealService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.DEAL, LogConstants.DELETE, LocalDateTime.now(), null);
+            auditLogService.logAction(deal.getOrganization(), currentUser, LogConstants.DEAL, deal.getId(), LogConstants.DELETE, AuditSource.API, "Soft-deleted deal: " + deal.getTitle());
 
             return Resources.setStatus(Constants.SUCCESS, Constants.DELETE_SUCCESS, LogConstants.DEAL);
 
@@ -374,6 +382,7 @@ public class DealServiceImpl implements DealService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.DEAL, LogConstants.MOVE_STAGE, LocalDateTime.now(), null);
+            auditLogService.logAction(updatedDeal.getOrganization(), currentUser, LogConstants.DEAL, updatedDeal.getId(), LogConstants.MOVE_STAGE, AuditSource.API, "Moved deal stage to: " + newStage.getName() + " (Status: " + updatedDeal.getStatus() + ")");
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, "Deal stage moved successfully.", LogConstants.DEAL);
             status.setDeal(updatedDeal);

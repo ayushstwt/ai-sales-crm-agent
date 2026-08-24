@@ -1,4 +1,11 @@
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\AiSalesCrmAgentApplication.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\audit\controller\AuditLogController.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\audit\dto\AuditLogSearchRequest.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\audit\entity\AuditLog.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\audit\entity\AuditSource.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\audit\repository\AuditLogRepository.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\audit\service\AuditLogService.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\audit\service\impl\AuditLogServiceImpl.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\auth\controller\AuthController.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\auth\dto\ForgotPasswordRequest.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\main\java\com\ayshriv\salescrm\auth\dto\LoginRequest.java
