@@ -12,6 +12,8 @@ public class LogConstants {
     public static final String ACTIVITY = "ACTIVITY";
     public static final String USER = "USER";
     public static final String LOG = "LOG";
+    public static final String PIPELINE = "PIPELINE";
+    public static final String PIPELINE_STAGE = "PIPELINE_STAGE";
 
     // Actions
     public static final String LIST = "LIST";
@@ -21,6 +23,8 @@ public class LogConstants {
     public static final String VIEW = "VIEW";
     public static final String SIGN_IN = "SIGN_IN";
     public static final String SIGN_UP = "SIGN_UP";
+    public static final String CONVERT = "CONVERT";
+    public static final String MOVE_STAGE = "MOVE_STAGE";
 
     private LogConstants() {
         // Utility class

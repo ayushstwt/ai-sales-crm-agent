@@ -1,0 +1,18 @@
+meta {
+  name: List Companies
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/companies?pageNumber=1&pageSize=10&orderBy=id&orderDir=DESC
+  body: none
+  auth: none
+}
+
+params:query {
+  pageNumber: 1
+  pageSize: 10
+  orderBy: id
+  orderDir: DESC
+}

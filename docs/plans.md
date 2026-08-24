@@ -54,17 +54,17 @@ Build these once, before any real entity, so every module built afterward follow
 
 Do these one at a time, each fully CRUD + tested before starting the next. **Every entity follows the Stage 0a/Stage 1 pattern exactly**: entity extends `BaseEntity` + carries `is_active`/`is_deleted`/`created_on`/`updated_on` (soft-delete convention, master.md §11 #11), service methods return `ApiStatus`, try/catch per method (no throwing), `Constants`/`LogConstants` for messages/logging, `TenantContextService` for the current user/org, a `logService.createLog(...)` call after each successful mutation (mirrors 1.13), controller stays thin and calls `Resources.formatedResponse(status, properties)`. Don't deviate per-entity — that consistency is the point of Stage 0a/1.
 
-- [ ] 2.1 `companies` — entity, migration, repository, service, controller, CRUD endpoints, pagination (list query filters `is_deleted=false`). Test create/list/get/update/delete via curl — delete should soft-delete, confirm the row still exists in the DB with `is_deleted=true`. Add `company`/`companies` fields to `ApiStatus` as part of this step (per master.md §7a — grow the wrapper incrementally, not upfront).
-- [ ] 2.2 `contacts` (FK to companies) — same pattern.
-- [ ] 2.3 `leads` — same pattern + status lifecycle enforcement (NEW→CONTACTED→QUALIFIED→CONVERTED/LOST, invalid transition = 422).
-- [ ] 2.4 `POST /leads/{id}/convert` — creates linked Contact/Company/Deal in one transaction.
-- [ ] 2.5 `pipelines` + `pipeline_stages` — CRUD, seed a default pipeline.
-- [ ] 2.6 `deals` — CRUD + `POST /deals/{id}/move-stage`.
+- [x] 2.1 `companies` — entity, migration, repository, service, controller, CRUD endpoints, pagination (list query filters `is_deleted=false`). Test create/list/get/update/delete via curl — delete should soft-delete, confirm the row still exists in the DB with `is_deleted=true`. Add `company`/`companies` fields to `ApiStatus` as part of this step (per master.md §7a — grow the wrapper incrementally, not upfront).
+- [x] 2.2 `contacts` (FK to companies) — same pattern.
+- [x] 2.3 `leads` — same pattern + status lifecycle enforcement (NEW→CONTACTED→QUALIFIED→CONVERTED/LOST, invalid transition = 422).
+- [x] 2.4 `POST /leads/{id}/convert` — creates linked Contact/Company/Deal in one transaction.
+- [x] 2.5 `pipelines` + `pipeline_stages` — CRUD, seed a default pipeline.
+- [x] 2.6 `deals` — CRUD + `POST /deals/{id}/move-stage`.
 - [ ] 2.7 `activities` — CRUD, linkable to lead/contact/company/deal.
 - [ ] 2.8 `tasks` — CRUD, status + priority enums.
 - [ ] 2.9 `notes` — CRUD, polymorphic entity_type/entity_id per master.md §8 flag.
-- [ ] 2.10 ~~Global exception handler~~ Already built in Stage 0a.6 as a thin safety-net only — nothing to do here except confirm it hasn't silently become the primary error path (spot-check a few endpoints: errors should come back as `ApiStatus{STATUS_ERROR}` from the service layer, not as the advice's generic error shape).
-- [ ] 2.11 Cross-tenant isolation test: two orgs, prove org A can't fetch org B's lead/deal/contact/company by ID (expect 404, not 403).
+- [x] 2.10 ~~Global exception handler~~ Already built in Stage 0a.6 as a thin safety-net only — nothing to do here except confirm it hasn't silently become the primary error path (spot-check a few endpoints: errors should come back as `ApiStatus{STATUS_ERROR}` from the service layer, not as the advice's generic error shape).
+- [x] 2.11 Cross-tenant isolation test: two orgs, prove org A can't fetch org B's lead/deal/contact/company by ID (expect 404, not 403).
 
 ## STAGE 3 — Audit Log (do this before AI, so AI actions are covered from day one)
 

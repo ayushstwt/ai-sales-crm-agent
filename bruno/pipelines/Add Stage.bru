@@ -1,0 +1,19 @@
+meta {
+  name: Add Stage
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/pipelines/1/stages
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Executive Sponsor Approved",
+    "orderIndex": 4,
+    "probability": 70.0
+  }
+}

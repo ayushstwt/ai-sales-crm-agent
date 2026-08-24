@@ -1,0 +1,25 @@
+meta {
+  name: Create Contact
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/contacts
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "organizationId": 1,
+    "companyId": 1,
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@acme.com",
+    "phone": "+1-555-0123",
+    "jobTitle": "VP of Engineering",
+    "department": "Engineering",
+    "isPrimary": true
+  }
+}

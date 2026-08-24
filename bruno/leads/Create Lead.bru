@@ -1,0 +1,26 @@
+meta {
+  name: Create Lead
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/leads
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "organizationId": 1,
+    "firstName": "Sarah",
+    "lastName": "Connor",
+    "email": "sarah.connor@cyberdyne.com",
+    "phone": "+1-555-0899",
+    "companyName": "Cyberdyne Systems",
+    "jobTitle": "Security Director",
+    "status": "NEW",
+    "source": "WEBSITE",
+    "notes": "Interested in AI security audit tools."
+  }
+}

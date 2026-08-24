@@ -1,0 +1,21 @@
+meta {
+  name: Convert Lead
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/leads/1/convert
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "companyName": "Cyberdyne Systems Inc",
+    "contactJobTitle": "Chief Security Officer",
+    "createDeal": true,
+    "dealTitle": "Cyberdyne Systems - Enterprise AI Deal",
+    "dealAmount": 75000.00
+  }
+}

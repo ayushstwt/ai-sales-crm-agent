@@ -1,0 +1,28 @@
+meta {
+  name: Edit Company
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/companies/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Acme Corporation",
+    "domain": "acmecorp.com",
+    "website": "https://www.acmecorp.com",
+    "industry": "Enterprise Software",
+    "phone": "+1-555-9999",
+    "address": "456 Mission St",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "USA",
+    "postalCode": "94105",
+    "description": "Updated enterprise client details",
+    "isActive": true
+  }
+}

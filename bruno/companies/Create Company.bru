@@ -1,0 +1,28 @@
+meta {
+  name: Create Company
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/companies
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "organizationId": 1,
+    "name": "Acme Corp",
+    "domain": "acme.com",
+    "website": "https://www.acme.com",
+    "industry": "Technology",
+    "phone": "+1-555-0199",
+    "address": "123 Market St",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "USA",
+    "postalCode": "94105",
+    "description": "Enterprise SaaS client"
+  }
+}

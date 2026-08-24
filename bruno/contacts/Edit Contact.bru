@@ -1,0 +1,24 @@
+meta {
+  name: Edit Contact
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/contacts/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@acmecorp.com",
+    "phone": "+1-555-9876",
+    "jobTitle": "Chief Technology Officer",
+    "department": "Executive",
+    "isPrimary": true,
+    "isActive": true
+  }
+}

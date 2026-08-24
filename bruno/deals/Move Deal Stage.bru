@@ -1,0 +1,18 @@
+meta {
+  name: Move Deal Stage
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/deals/1/move-stage
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "pipelineStageId": 2,
+    "status": "OPEN"
+  }
+}

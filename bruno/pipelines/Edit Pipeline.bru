@@ -1,0 +1,19 @@
+meta {
+  name: Edit Pipeline
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/pipelines/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Enterprise Sales Pipeline",
+    "isDefault": true,
+    "isActive": true
+  }
+}

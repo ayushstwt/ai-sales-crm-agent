@@ -1,0 +1,27 @@
+meta {
+  name: Create Pipeline
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/pipelines
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "organizationId": 1,
+    "name": "Standard Sales Pipeline",
+    "isDefault": true,
+    "stages": [
+      { "name": "Prospecting", "orderIndex": 1, "probability": 10.0 },
+      { "name": "Qualified", "orderIndex": 2, "probability": 30.0 },
+      { "name": "Proposal", "orderIndex": 3, "probability": 60.0 },
+      { "name": "Negotiation", "orderIndex": 4, "probability": 80.0 },
+      { "name": "Closed Won", "orderIndex": 5, "probability": 100.0 },
+      { "name": "Closed Lost", "orderIndex": 6, "probability": 0.0 }
+    ]
+  }
+}

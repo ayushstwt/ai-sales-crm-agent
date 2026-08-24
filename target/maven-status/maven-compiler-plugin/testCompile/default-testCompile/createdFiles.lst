@@ -1,4 +1,8 @@
+com\ayshriv\salescrm\common\config\GlobalExceptionHandlerTest.class
 com\ayshriv\salescrm\auth\controller\AuthControllerTest.class
+com\ayshriv\salescrm\common\controller\TestControllerTest.class
+com\ayshriv\salescrm\tenant\CrossTenantIsolationTest.class
 com\ayshriv\salescrm\user\service\LogServiceTest.class
 com\ayshriv\salescrm\AiSalesCrmAgentApplicationTests.class
 com\ayshriv\salescrm\user\controller\UserControllerTest.class
+com\ayshriv\salescrm\common\security\TenantContextServiceTest.class

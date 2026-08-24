@@ -1,0 +1,24 @@
+meta {
+  name: Create Deal
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/deals
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "organizationId": 1,
+    "companyId": 1,
+    "contactId": 1,
+    "pipelineStageId": 1,
+    "title": "Acme Enterprise License",
+    "amount": 50000.00,
+    "currency": "USD",
+    "status": "OPEN"
+  }
+}
