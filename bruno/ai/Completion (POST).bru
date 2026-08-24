@@ -1,0 +1,17 @@
+meta {
+  name: Completion (POST)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/ai/completion
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "prompt": "Explain what a CRM sales pipeline is in two sentences."
+  }
+}

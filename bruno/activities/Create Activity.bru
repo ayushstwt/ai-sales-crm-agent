@@ -1,0 +1,21 @@
+meta {
+  name: Create Activity
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/activities
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "organizationId": 1,
+    "type": "CALL",
+    "title": "Discovery Call with Acme CTO",
+    "description": "Discussed security requirements and deployment timeline.",
+    "companyId": 1
+  }
+}

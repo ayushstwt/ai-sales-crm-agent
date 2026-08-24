@@ -1,0 +1,15 @@
+meta {
+  name: Completion (GET)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/ai/completion?prompt=Hello
+  body: none
+  auth: none
+}
+
+params:query {
+  prompt: Hello
+}

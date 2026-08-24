@@ -1,0 +1,18 @@
+meta {
+  name: List Activities
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/activities?pageNumber=1&pageSize=10&orderBy=activityDate&orderDir=DESC
+  body: none
+  auth: none
+}
+
+params:query {
+  pageNumber: 1
+  pageSize: 10
+  orderBy: activityDate
+  orderDir: DESC
+}

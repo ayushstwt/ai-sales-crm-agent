@@ -1,0 +1,18 @@
+meta {
+  name: List Tasks
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/tasks?pageNumber=1&pageSize=10&orderBy=createdOn&orderDir=DESC
+  body: none
+  auth: none
+}
+
+params:query {
+  pageNumber: 1
+  pageSize: 10
+  orderBy: createdOn
+  orderDir: DESC
+}

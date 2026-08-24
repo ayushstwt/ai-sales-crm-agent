@@ -1,0 +1,24 @@
+meta {
+  name: Create Task
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/tasks
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "organizationId": 1,
+    "title": "Follow up with Acme Corp about pricing",
+    "description": "Send updated quotation and follow up on email.",
+    "dueDate": "2026-09-01T15:00:00",
+    "status": "PENDING",
+    "priority": "HIGH",
+    "relatedType": "COMPANY",
+    "relatedId": 1
+  }
+}
