@@ -3,6 +3,7 @@ package com.ayshriv.salescrm.common.resources;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
+import java.util.List;
 
 @JsonFilter("apiStatusFilter")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -13,24 +14,28 @@ public class ApiStatus implements Serializable {
     private String token;
     private Long total;
     private com.ayshriv.salescrm.user.entity.User user;
-    private java.util.List<com.ayshriv.salescrm.user.entity.User> users;
+    private List<com.ayshriv.salescrm.user.entity.User> users;
     private com.ayshriv.salescrm.organization.entity.Organization organization;
     private com.ayshriv.salescrm.user.entity.UserLog log;
-    private java.util.List<com.ayshriv.salescrm.user.entity.UserLog> logs;
+    private List<com.ayshriv.salescrm.user.entity.UserLog> logs;
     private com.ayshriv.salescrm.company.entity.Company company;
-    private java.util.List<com.ayshriv.salescrm.company.entity.Company> companies;
+    private List<com.ayshriv.salescrm.company.entity.Company> companies;
     private com.ayshriv.salescrm.contact.entity.Contact contact;
-    private java.util.List<com.ayshriv.salescrm.contact.entity.Contact> contacts;
+    private List<com.ayshriv.salescrm.contact.entity.Contact> contacts;
     private com.ayshriv.salescrm.lead.entity.Lead lead;
-    private java.util.List<com.ayshriv.salescrm.lead.entity.Lead> leads;
+    private List<com.ayshriv.salescrm.lead.entity.Lead> leads;
     private com.ayshriv.salescrm.pipeline.entity.Pipeline pipeline;
-    private java.util.List<com.ayshriv.salescrm.pipeline.entity.Pipeline> pipelines;
+    private List<com.ayshriv.salescrm.pipeline.entity.Pipeline> pipelines;
     private com.ayshriv.salescrm.pipeline.entity.PipelineStage pipelineStage;
-    private java.util.List<com.ayshriv.salescrm.pipeline.entity.PipelineStage> pipelineStages;
+    private List<com.ayshriv.salescrm.pipeline.entity.PipelineStage> pipelineStages;
     private com.ayshriv.salescrm.deal.entity.Deal deal;
-    private java.util.List<com.ayshriv.salescrm.deal.entity.Deal> deals;
+    private List<com.ayshriv.salescrm.deal.entity.Deal> deals;
     private com.ayshriv.salescrm.audit.entity.AuditLog auditLog;
-    private java.util.List<com.ayshriv.salescrm.audit.entity.AuditLog> auditLogs;
+    private List<com.ayshriv.salescrm.audit.entity.AuditLog> auditLogs;
+    private com.ayshriv.salescrm.task.entity.Task task;
+    private List<com.ayshriv.salescrm.task.entity.Task> tasks;
+    private com.ayshriv.salescrm.activity.entity.Activity activity;
+    private List<com.ayshriv.salescrm.activity.entity.Activity> activities;
 
     public ApiStatus() {
     }
@@ -80,11 +85,11 @@ public class ApiStatus implements Serializable {
         this.user = user;
     }
 
-    public java.util.List<com.ayshriv.salescrm.user.entity.User> getUsers() {
+    public List<com.ayshriv.salescrm.user.entity.User> getUsers() {
         return users;
     }
 
-    public void setUsers(java.util.List<com.ayshriv.salescrm.user.entity.User> users) {
+    public void setUsers(List<com.ayshriv.salescrm.user.entity.User> users) {
         this.users = users;
     }
 
@@ -104,11 +109,11 @@ public class ApiStatus implements Serializable {
         this.log = log;
     }
 
-    public java.util.List<com.ayshriv.salescrm.user.entity.UserLog> getLogs() {
+    public List<com.ayshriv.salescrm.user.entity.UserLog> getLogs() {
         return logs;
     }
 
-    public void setLogs(java.util.List<com.ayshriv.salescrm.user.entity.UserLog> logs) {
+    public void setLogs(List<com.ayshriv.salescrm.user.entity.UserLog> logs) {
         this.logs = logs;
     }
 
@@ -120,11 +125,11 @@ public class ApiStatus implements Serializable {
         this.company = company;
     }
 
-    public java.util.List<com.ayshriv.salescrm.company.entity.Company> getCompanies() {
+    public List<com.ayshriv.salescrm.company.entity.Company> getCompanies() {
         return companies;
     }
 
-    public void setCompanies(java.util.List<com.ayshriv.salescrm.company.entity.Company> companies) {
+    public void setCompanies(List<com.ayshriv.salescrm.company.entity.Company> companies) {
         this.companies = companies;
     }
 
@@ -136,11 +141,11 @@ public class ApiStatus implements Serializable {
         this.contact = contact;
     }
 
-    public java.util.List<com.ayshriv.salescrm.contact.entity.Contact> getContacts() {
+    public List<com.ayshriv.salescrm.contact.entity.Contact> getContacts() {
         return contacts;
     }
 
-    public void setContacts(java.util.List<com.ayshriv.salescrm.contact.entity.Contact> contacts) {
+    public void setContacts(List<com.ayshriv.salescrm.contact.entity.Contact> contacts) {
         this.contacts = contacts;
     }
 
@@ -152,11 +157,11 @@ public class ApiStatus implements Serializable {
         this.lead = lead;
     }
 
-    public java.util.List<com.ayshriv.salescrm.lead.entity.Lead> getLeads() {
+    public List<com.ayshriv.salescrm.lead.entity.Lead> getLeads() {
         return leads;
     }
 
-    public void setLeads(java.util.List<com.ayshriv.salescrm.lead.entity.Lead> leads) {
+    public void setLeads(List<com.ayshriv.salescrm.lead.entity.Lead> leads) {
         this.leads = leads;
     }
 
@@ -168,11 +173,11 @@ public class ApiStatus implements Serializable {
         this.pipeline = pipeline;
     }
 
-    public java.util.List<com.ayshriv.salescrm.pipeline.entity.Pipeline> getPipelines() {
+    public List<com.ayshriv.salescrm.pipeline.entity.Pipeline> getPipelines() {
         return pipelines;
     }
 
-    public void setPipelines(java.util.List<com.ayshriv.salescrm.pipeline.entity.Pipeline> pipelines) {
+    public void setPipelines(List<com.ayshriv.salescrm.pipeline.entity.Pipeline> pipelines) {
         this.pipelines = pipelines;
     }
 
@@ -184,11 +189,11 @@ public class ApiStatus implements Serializable {
         this.pipelineStage = pipelineStage;
     }
 
-    public java.util.List<com.ayshriv.salescrm.pipeline.entity.PipelineStage> getPipelineStages() {
+    public List<com.ayshriv.salescrm.pipeline.entity.PipelineStage> getPipelineStages() {
         return pipelineStages;
     }
 
-    public void setPipelineStages(java.util.List<com.ayshriv.salescrm.pipeline.entity.PipelineStage> pipelineStages) {
+    public void setPipelineStages(List<com.ayshriv.salescrm.pipeline.entity.PipelineStage> pipelineStages) {
         this.pipelineStages = pipelineStages;
     }
 
@@ -200,11 +205,11 @@ public class ApiStatus implements Serializable {
         this.deal = deal;
     }
 
-    public java.util.List<com.ayshriv.salescrm.deal.entity.Deal> getDeals() {
+    public List<com.ayshriv.salescrm.deal.entity.Deal> getDeals() {
         return deals;
     }
 
-    public void setDeals(java.util.List<com.ayshriv.salescrm.deal.entity.Deal> deals) {
+    public void setDeals(List<com.ayshriv.salescrm.deal.entity.Deal> deals) {
         this.deals = deals;
     }
 
@@ -216,11 +221,43 @@ public class ApiStatus implements Serializable {
         this.auditLog = auditLog;
     }
 
-    public java.util.List<com.ayshriv.salescrm.audit.entity.AuditLog> getAuditLogs() {
+    public List<com.ayshriv.salescrm.audit.entity.AuditLog> getAuditLogs() {
         return auditLogs;
     }
 
-    public void setAuditLogs(java.util.List<com.ayshriv.salescrm.audit.entity.AuditLog> auditLogs) {
+    public void setAuditLogs(List<com.ayshriv.salescrm.audit.entity.AuditLog> auditLogs) {
         this.auditLogs = auditLogs;
+    }
+
+    public com.ayshriv.salescrm.task.entity.Task getTask() {
+        return task;
+    }
+
+    public void setTask(com.ayshriv.salescrm.task.entity.Task task) {
+        this.task = task;
+    }
+
+    public List<com.ayshriv.salescrm.task.entity.Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<com.ayshriv.salescrm.task.entity.Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public com.ayshriv.salescrm.activity.entity.Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(com.ayshriv.salescrm.activity.entity.Activity activity) {
+        this.activity = activity;
+    }
+
+    public List<com.ayshriv.salescrm.activity.entity.Activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<com.ayshriv.salescrm.activity.entity.Activity> activities) {
+        this.activities = activities;
     }
 }

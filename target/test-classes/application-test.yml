@@ -11,3 +11,11 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+
+  ai:
+    openai:
+      api-key: test-key
+      chat:
+        options:
+          model: gpt-4o-mini
+

@@ -105,7 +105,12 @@ public class DealServiceImpl implements DealService {
 
             Page<Deal> page;
             if (targetOrgId != null) {
-                page = dealRepository.findByOrganizationIdAndIsDeletedFalse(targetOrgId, pageable);
+                String title = request.getTitle() != null && !request.getTitle().isBlank() ? request.getTitle().trim() : null;
+                if (request.getStatus() != null || title != null || request.getCompanyId() != null || request.getContactId() != null || request.getPipelineStageId() != null) {
+                    page = dealRepository.searchDeals(targetOrgId, request.getStatus(), title, request.getCompanyId(), request.getContactId(), request.getPipelineStageId(), pageable);
+                } else {
+                    page = dealRepository.findByOrganizationIdAndIsDeletedFalse(targetOrgId, pageable);
+                }
             } else {
                 page = dealRepository.findByIsDeletedFalse(pageable);
             }
@@ -342,9 +347,15 @@ public class DealServiceImpl implements DealService {
     @Override
     @Transactional
     public ApiStatus moveStage(Long id, DealMoveStageRequest request) {
-        LOGGER.info("DealService >> moveStage called for deal id: {} to stage id: {}", id, request.getPipelineStageId());
+        return moveStage(id, request, AuditSource.API);
+    }
+
+    @Override
+    @Transactional
+    public ApiStatus moveStage(Long id, DealMoveStageRequest request, AuditSource auditSource) {
+        LOGGER.info("DealService >> moveStage called for deal id: {} to stage id: {}, source: {}", id, request != null ? request.getPipelineStageId() : null, auditSource);
         try {
-            if (id == null || request.getPipelineStageId() == null) {
+            if (id == null || request == null || request.getPipelineStageId() == null) {
                 return Resources.setStatus(Constants.FAILURE, Constants.PARAMETER_MISSING + "id or pipelineStageId", null);
             }
 
@@ -382,7 +393,15 @@ public class DealServiceImpl implements DealService {
 
             User currentUser = resolveCurrentUser(context);
             logService.createLog(currentUser, LogConstants.DEAL, LogConstants.MOVE_STAGE, LocalDateTime.now(), null);
-            auditLogService.logAction(updatedDeal.getOrganization(), currentUser, LogConstants.DEAL, updatedDeal.getId(), LogConstants.MOVE_STAGE, AuditSource.API, "Moved deal stage to: " + newStage.getName() + " (Status: " + updatedDeal.getStatus() + ")");
+            auditLogService.logAction(
+                    updatedDeal.getOrganization(),
+                    currentUser,
+                    LogConstants.DEAL,
+                    updatedDeal.getId(),
+                    LogConstants.MOVE_STAGE,
+                    auditSource != null ? auditSource : AuditSource.API,
+                    "Moved deal stage to: " + newStage.getName() + " (Status: " + updatedDeal.getStatus() + ")"
+            );
 
             ApiStatus status = Resources.setStatus(Constants.SUCCESS, "Deal stage moved successfully.", LogConstants.DEAL);
             status.setDeal(updatedDeal);

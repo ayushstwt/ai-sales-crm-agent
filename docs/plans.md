@@ -80,13 +80,13 @@ Do these one at a time, each fully CRUD + tested before starting the next. **Eve
 
 > Reminder (master.md §7a): AI/chat/RAG responses are the deliberate exception to the `ApiStatus` pattern. Use dedicated DTOs (`ChatResponse`, etc.) here, not the shared wrapper. Everything else (tool implementations calling into Stage 2 services) still goes through `ApiStatus` underneath.
 
-- [ ] 5.1 Add Spring AI dependency, wire `LLMProvider` interface + `OpenAIProvider` implementation (master.md #1 — Azure stub only, not implemented). Confirm a raw "hello" completion works via a throwaway test endpoint.
-- [ ] 5.2 `conversations` + `conversation_messages` tables. `POST /ai/chat` that just echoes LLM text response (no tools yet), returning a dedicated `ChatResponse` DTO — not `ApiStatus`. Confirm round-trip works and messages persist.
-- [ ] 5.3 `tool_executions` table (schema only, not wired yet).
-- [ ] 5.4 Build ONE tool end-to-end first: `searchLeads()`. Wire tool-calling through Spring AI, confirm the agent calls the real LeadService (not repository directly — master.md rule #2), and logs to `tool_executions`.
-- [ ] 5.5 Verify architecture rule #2 explicitly: write a short note/test confirming the tool path goes through the service+authorization layer, not a shortcut.
-- [ ] 5.6 Add 3-4 more read-only tools: `getLead`, `searchDeals`, `getDeal`, `getCustomerTimeline`. Test each via chat prompts.
-- [ ] 5.7 Add write tools: `createTask`, `updateDealStage`. Confirm audit_logs entries show `source: AI_AGENT`.
+- [x] 5.1 Add Spring AI dependency, wire `LLMProvider` interface + `OpenAIProvider` implementation (master.md #1 — Azure stub only, not implemented). Confirm a raw "hello" completion works via a throwaway test endpoint.
+- [x] 5.2 `conversations` + `conversation_messages` tables. `POST /ai/chat` that just echoes LLM text response (no tools yet), returning a dedicated `ChatResponse` DTO — not `ApiStatus`. Confirm round-trip works and messages persist.
+- [x] 5.3 `tool_executions` table (schema only, not wired yet).
+- [x] 5.4 Build ONE tool end-to-end first: `searchLeads()`. Wire tool-calling through Spring AI, confirm the agent calls the real LeadService (not repository directly — master.md rule #2), and logs to `tool_executions`.
+- [x] 5.5 Verify architecture rule #2 explicitly: write a short note/test confirming the tool path goes through the service+authorization layer, not a shortcut.
+- [x] 5.6 Add 3-4 more read-only tools: `getLead`, `searchDeals`, `getDeal`, `getCustomerTimeline`. Test each via chat prompts.
+- [x] 5.7 Add write tools: `createTask`, `updateDealStage`. Confirm audit_logs entries show `source: AI_AGENT`.
 - [ ] 5.8 Destructive-action confirmation flow (master.md rule #4) — implement conversation-state tracking for pending confirmations. Test with a bulk-delete-style prompt (even if the actual destructive tool is just a stub for now).
 - [ ] 5.9 System prompt hardening (master.md rule #3) — write the system prompt treating retrieved data as non-instructional. Create ONE seeded note containing an injection attempt ("ignore previous instructions...") and write a test proving the agent doesn't act on it.
 - [ ] 5.10 Customer 360 AI summary — `POST /ai/chat` intent that uses the Stage 4 aggregation as tool output and returns a natural-language summary.

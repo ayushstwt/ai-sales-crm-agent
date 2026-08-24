@@ -117,8 +117,12 @@ public class LeadServiceImpl implements LeadService {
 
             Page<Lead> page;
             if (targetOrgId != null) {
-                if (request.getStatus() != null) {
-                    page = leadRepository.findByOrganizationIdAndStatusAndIsDeletedFalse(targetOrgId, request.getStatus(), pageable);
+                String companyName = request.getCompanyName() != null && !request.getCompanyName().isBlank() ? request.getCompanyName().trim() : null;
+                String email = request.getEmail() != null && !request.getEmail().isBlank() ? request.getEmail().trim() : null;
+                String name = request.getName() != null && !request.getName().isBlank() ? request.getName().trim() : null;
+
+                if (request.getStatus() != null || companyName != null || email != null || name != null) {
+                    page = leadRepository.searchLeads(targetOrgId, request.getStatus(), companyName, email, name, pageable);
                 } else {
                     page = leadRepository.findByOrganizationIdAndIsDeletedFalse(targetOrgId, pageable);
                 }

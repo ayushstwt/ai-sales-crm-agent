@@ -1,5 +1,6 @@
 package com.ayshriv.salescrm.deal.service;
 
+import com.ayshriv.salescrm.audit.entity.AuditSource;
 import com.ayshriv.salescrm.common.resources.ApiStatus;
 import com.ayshriv.salescrm.deal.dto.DealCreateRequest;
 import com.ayshriv.salescrm.deal.dto.DealMoveStageRequest;
@@ -19,4 +20,6 @@ public interface DealService {
     ApiStatus deleteDeal(Long id);
 
     ApiStatus moveStage(Long id, DealMoveStageRequest request);
+
+    ApiStatus moveStage(Long id, DealMoveStageRequest request, AuditSource auditSource);
 }
