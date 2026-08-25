@@ -1,5 +1,6 @@
 # Documentation
 docs/
+docs/**
 
 # Maven / Build output
 target/
