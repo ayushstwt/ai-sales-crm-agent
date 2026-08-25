@@ -121,7 +121,7 @@ SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/salescrm
 
 # Azure OpenAI Configuration (Active by default)
 AZURE_OPENAI_API_KEY=your-azure-openai-api-key
-AZURE_OPENAI_ENDPOINT=https://sharkdom-aditya-openai.openai.azure.com/
+AZURE_OPENAI_ENDPOINT=your url
 AZURE_OPENAI_DEPLOYMENT=gpt-5-mini
 
 # Standard OpenAI Configuration (Optional fallback)
