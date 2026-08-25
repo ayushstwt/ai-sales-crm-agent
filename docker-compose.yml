@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: salescrm-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-salescrm}
+      POSTGRES_USER: ${POSTGRES_USER:-salescrm_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-salescrm_password}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./scripts/init-pgvector.sql:/docker-entrypoint-initdb.d/init-pgvector.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-salescrm_app} -d ${POSTGRES_DB:-salescrm}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - salescrm-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: salescrm-api
+    restart: unless-stopped
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-salescrm}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-salescrm_app}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-salescrm_password}
+      AZURE_OPENAI_API_KEY: ${AZURE_OPENAI_API_KEY:-}
+      AZURE_OPENAI_ENDPOINT: ${AZURE_OPENAI_ENDPOINT:-https://sharkdom-aditya-openai.openai.azure.com/}
+      AZURE_OPENAI_DEPLOYMENT: ${AZURE_OPENAI_DEPLOYMENT:-gpt-5-mini}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - salescrm-network
+
+volumes:
+  pgdata:
+    driver: local
+
+networks:
+  salescrm-network:
+    driver: bridge

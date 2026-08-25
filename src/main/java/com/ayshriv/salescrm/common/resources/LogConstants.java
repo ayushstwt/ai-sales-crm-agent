@@ -17,6 +17,8 @@ public class LogConstants {
     public static final String AUDIT_LOG = "AUDIT_LOG";
     public static final String CUSTOMER = "CUSTOMER";
     public static final String CUSTOMER_360 = "CUSTOMER_360";
+    public static final String DOCUMENT = "DOCUMENT";
+    public static final String DOCUMENT_CHUNK = "DOCUMENT_CHUNK";
 
     // Actions
     public static final String LIST = "LIST";
@@ -28,6 +30,8 @@ public class LogConstants {
     public static final String SIGN_UP = "SIGN_UP";
     public static final String CONVERT = "CONVERT";
     public static final String MOVE_STAGE = "MOVE_STAGE";
+    public static final String UPLOAD = "UPLOAD";
+    public static final String RETRIEVE = "RETRIEVE";
 
     private LogConstants() {
         // Utility class

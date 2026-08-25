@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class GetDealInput {
 
+    @com.fasterxml.jackson.annotation.JsonAlias({"dealId", "id"})
     @JsonProperty("id")
     @JsonPropertyDescription("The ID of the deal to retrieve")
     private Long id;

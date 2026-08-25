@@ -37,6 +37,8 @@ public class ApiStatus implements Serializable {
     private com.ayshriv.salescrm.activity.entity.Activity activity;
     private List<com.ayshriv.salescrm.activity.entity.Activity> activities;
     private com.ayshriv.salescrm.customer.dto.Customer360Dto customer360;
+    private com.ayshriv.salescrm.document.entity.Document document;
+    private List<com.ayshriv.salescrm.document.entity.Document> documents;
 
     public ApiStatus() {
     }
@@ -268,5 +270,21 @@ public class ApiStatus implements Serializable {
 
     public void setCustomer360(com.ayshriv.salescrm.customer.dto.Customer360Dto customer360) {
         this.customer360 = customer360;
+    }
+
+    public com.ayshriv.salescrm.document.entity.Document getDocument() {
+        return document;
+    }
+
+    public void setDocument(com.ayshriv.salescrm.document.entity.Document document) {
+        this.document = document;
+    }
+
+    public List<com.ayshriv.salescrm.document.entity.Document> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<com.ayshriv.salescrm.document.entity.Document> documents) {
+        this.documents = documents;
     }
 }

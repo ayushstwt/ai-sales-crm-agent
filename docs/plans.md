@@ -93,20 +93,20 @@ Do these one at a time, each fully CRUD + tested before starting the next. **Eve
 
 ## STAGE 6 — RAG
 
-- [ ] 6.1 `documents` + `document_chunks` (pgvector column) tables.
-- [ ] 6.2 Document upload endpoint (PDF/DOCX/TXT) — text extraction only, no embedding yet. Confirm text comes out correctly for each file type.
-- [ ] 6.3 Chunking (fixed ~500 tokens, overlap — master.md #2, revisit later if results are poor).
-- [ ] 6.4 Embedding generation + storage in `document_chunks` with `organization_id`.
-- [ ] 6.5 Retrieval: similarity search filtered by `organization_id` FIRST (master.md rule #5), then similarity ranking. Write a cross-tenant test proving org A never gets org B's chunks back, even for a highly similar query.
-- [ ] 6.6 Wire retrieval into `/ai/chat` as a tool/context source. Confirm chat responses cite which document was used.
+- [x] 6.1 `documents` + `document_chunks` (pgvector column) tables.
+- [x] 6.2 Document upload endpoint (PDF/DOCX/TXT) — text extraction only, no embedding yet. Confirm text comes out correctly for each file type.
+- [x] 6.3 Chunking (fixed ~500 tokens, overlap — master.md #2, revisit later if results are poor).
+- [x] 6.4 Embedding generation + storage in `document_chunks` with `organization_id`.
+- [x] 6.5 Retrieval: similarity search filtered by `organization_id` FIRST (master.md rule #5), then similarity ranking. Write a cross-tenant test proving org A never gets org B's chunks back, even for a highly similar query.
+- [x] 6.6 Wire retrieval into `/ai/chat` as a tool/context source. Confirm chat responses cite which document was used.
 
 ## STAGE 7 — Demo Polish & Verification
 
-- [ ] 7.1 Seed script: sample org, ~20 leads, contacts, companies, a pipeline, deals, activities, 1-2 sample documents.
-- [ ] 7.2 Run the full Killer Demo Flow (master.md §10) end-to-end, no manual DB fixes.
-- [ ] 7.3 Manual eval: run ~15 test queries, log correct/incorrect tool selection, target ≥90% (master.md §9).
+- [x] 7.1 Seed script: sample org, ~20 leads, contacts, companies, a pipeline, deals, activities, 1-2 sample documents.
+- [x] 7.2 Run the full Killer Demo Flow (master.md §10) end-to-end, no manual DB fixes.
+- [x] 7.3 Manual eval: run ~15 test queries, log correct/incorrect tool selection, target ≥90% (master.md §9).
 - [ ] 7.4 Record the demo video / walkthrough.
-- [ ] 7.5 Write README — setup steps must cover: local Postgres 16 + pgvector prerequisite (not Docker), how to create the DB/role, how to run migrations, architecture diagram, demo instructions, what's MVP vs deferred per master.md §5.
+- [x] 7.5 Write README — setup steps must cover: local Postgres 16 + pgvector prerequisite (not Docker), how to create the DB/role, how to run migrations, architecture diagram, demo instructions, what's MVP vs deferred per master.md §5.
 - [ ] 7.6 (Optional, only if you want it) Dockerize the Spring Boot app itself for portfolio polish — Postgres stays local/host, not containerized. Skip entirely if not needed.
 
 ---

@@ -1,0 +1,15 @@
+meta {
+  name: Extract Text
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/documents/extract
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  file: @file(scripts/seed_demo_data.sql)
+}

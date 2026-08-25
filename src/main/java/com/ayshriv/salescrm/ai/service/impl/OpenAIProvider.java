@@ -16,8 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-@Primary
+@Service("openAIProvider")
 public class OpenAIProvider implements LLMProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OpenAIProvider.class);

@@ -84,9 +84,6 @@ public class AiChatControllerTest {
     @MockBean
     private LLMProvider llmProvider;
 
-    @Autowired
-    private AzureOpenAIProvider azureOpenAIProvider;
-
     private Organization testOrg;
     private User testUser;
 
@@ -145,13 +142,6 @@ public class AiChatControllerTest {
                 .andExpect(jsonPath("$.completion").value("Hello from LLM!"));
     }
 
-    @Test
-    @DisplayName("Step 5.1: Azure OpenAI provider throws UnsupportedOperationException as a stub")
-    void testAzureOpenAIProviderIsStub() {
-        assertThatThrownBy(() -> azureOpenAIProvider.generateText("test"))
-                .isInstanceOf(UnsupportedOperationException.class)
-                .hasMessageContaining("stub per master.md decision #1");
-    }
 
     @Test
     @DisplayName("Step 5.2: POST /ai/chat creates conversation, persists user & assistant messages, returns ChatResponse DTO")
@@ -259,7 +249,7 @@ public class AiChatControllerTest {
     void testChatTriggersToolExecution() throws Exception {
         when(llmProvider.generateTextWithTools(anyList(), anyList())).thenAnswer(invocation -> {
             List<FunctionCallback> callbacks = invocation.getArgument(1);
-            assertThat(callbacks).hasSize(9);
+            assertThat(callbacks).hasSize(10);
             
             FunctionCallback searchLeads = callbacks.stream().filter(c -> c.getName().equals("searchLeads")).findFirst().orElseThrow();
             String toolResult = searchLeads.call("{\"companyName\":\"Acme\"}");
@@ -590,5 +580,55 @@ public class AiChatControllerTest {
         assertThat(executions).isNotEmpty();
         assertThat(executions.get(0).getStatus()).isEqualTo("SUCCESS");
         assertThat(executions.get(0).getResult()).contains("Acme Enterprise");
+    }
+
+    @Autowired
+    private com.ayshriv.salescrm.document.service.DocumentService documentService;
+
+    @Test
+    @DisplayName("Stage 6.6: RAG retrieval wired into /ai/chat — agent executes retrieveKnowledgeBase and cites source document")
+    void testChatWithRagRetrievalAndCitations() throws Exception {
+        // 1. Upload a knowledge base document
+        org.springframework.mock.web.MockMultipartFile mockFile = new org.springframework.mock.web.MockMultipartFile(
+                "file",
+                "sales_playbook_2026.txt",
+                "text/plain",
+                ("SalesPilot Enterprise Playbook 2026\n" +
+                 "Standard payment terms are Net-30. Enterprise annual licenses are eligible for up to 20% discount if paid upfront.\n" +
+                 "SLA guarantees 99.9% uptime with 1-hour critical response window.").getBytes(java.nio.charset.StandardCharsets.UTF_8)
+        );
+        com.ayshriv.salescrm.document.dto.DocumentUploadResponse uploadResponse = documentService.uploadDocument(mockFile, "Enterprise Sales Playbook 2026");
+        assertThat(uploadResponse.getDocumentId()).isNotNull();
+
+        // 2. Mock LLM: LLM chooses tool retrieveKnowledgeBase, receives chunks, and formats answer citing the document title
+        when(llmProvider.generateTextWithTools(anyList(), anyList())).thenAnswer(invocation -> {
+            List<FunctionCallback> callbacks = invocation.getArgument(1);
+            assertThat(callbacks).hasSize(10);
+
+            FunctionCallback ragTool = callbacks.stream()
+                    .filter(c -> c.getName().equals("retrieveKnowledgeBase"))
+                    .findFirst()
+                    .orElseThrow();
+            String toolResult = ragTool.call("{\"query\":\"What are the standard enterprise payment terms and discounts?\",\"topK\":2}");
+            assertThat(toolResult).contains("Enterprise Sales Playbook 2026");
+            assertThat(toolResult).contains("Net-30");
+
+            return "According to our internal policy, standard payment terms are Net-30, and enterprise annual licenses can receive up to a 20% discount when paid upfront. [Source: Enterprise Sales Playbook 2026 (sales_playbook_2026.txt)]";
+        });
+
+        ChatRequest request = new ChatRequest("What are our standard enterprise payment terms and discount policies?");
+        mockMvc.perform(post("/ai/chat")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("Net-30")))
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("20% discount")))
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("[Source: Enterprise Sales Playbook 2026 (sales_playbook_2026.txt)]")));
+
+        // Verify tool execution was logged
+        List<ToolExecution> executions = toolExecutionRepository.findByToolNameAndIsDeletedFalseOrderByCreatedOnDesc("retrieveKnowledgeBase");
+        assertThat(executions).isNotEmpty();
+        assertThat(executions.get(0).getStatus()).isEqualTo("SUCCESS");
+        assertThat(executions.get(0).getResult()).contains("Enterprise Sales Playbook 2026");
     }
 }

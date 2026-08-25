@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class GetLeadInput {
 
+    @com.fasterxml.jackson.annotation.JsonAlias({"leadId", "id"})
     @JsonProperty("id")
     @JsonPropertyDescription("The ID of the lead to retrieve")
     private Long id;

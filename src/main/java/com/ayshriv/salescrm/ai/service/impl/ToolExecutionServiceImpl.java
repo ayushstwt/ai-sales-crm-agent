@@ -47,7 +47,8 @@ public class ToolExecutionServiceImpl implements ToolExecutionService {
     @Override
     @Transactional
     public ToolExecution recordExecution(String toolName, String arguments, String result, String status, Long executionTimeMs) {
-        return recordExecution(null, toolName, arguments, result, status, executionTimeMs);
+        Long conversationId = com.ayshriv.salescrm.ai.context.ConversationContextHolder.getConversationId();
+        return recordExecution(conversationId, toolName, arguments, result, status, executionTimeMs);
     }
 
     @Override

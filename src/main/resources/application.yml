@@ -3,9 +3,9 @@ spring:
     name: ai-sales-crm-agent
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/salescrm
-    username: salescrm_app
-    password: salescrm_password
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/salescrm}
+    username: ${SPRING_DATASOURCE_USERNAME:salescrm_app}
+    password: ${SPRING_DATASOURCE_PASSWORD:salescrm_password}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -28,3 +28,8 @@ spring:
         options:
           model: ${OPENAI_MODEL:gpt-4o-mini}
 
+azure:
+  openai:
+    api-key: ${AZURE_OPENAI_API_KEY:}
+    endpoint: ${AZURE_OPENAI_ENDPOINT:https://sharkdom-aditya-openai.openai.azure.com/}
+    deployment: ${AZURE_OPENAI_DEPLOYMENT:gpt-5-mini}
