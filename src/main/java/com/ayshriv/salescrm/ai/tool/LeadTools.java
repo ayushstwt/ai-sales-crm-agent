@@ -1,6 +1,12 @@
 package com.ayshriv.salescrm.ai.tool;
 
+import com.ayshriv.salescrm.ai.context.ConversationContextHolder;
+import com.ayshriv.salescrm.ai.dto.PendingActionPayload;
+import com.ayshriv.salescrm.ai.entity.PendingActionStatus;
+import com.ayshriv.salescrm.ai.repository.ConversationRepository;
 import com.ayshriv.salescrm.ai.service.ToolExecutionService;
+import com.ayshriv.salescrm.ai.tool.dto.BulkDeleteLeadsInput;
+import com.ayshriv.salescrm.ai.tool.dto.BulkDeleteLeadsOutput;
 import com.ayshriv.salescrm.ai.tool.dto.GetLeadInput;
 import com.ayshriv.salescrm.ai.tool.dto.GetLeadOutput;
 import com.ayshriv.salescrm.ai.tool.dto.LeadSummary;
@@ -18,9 +24,11 @@ import org.springframework.ai.model.function.FunctionCallback;
 import org.springframework.ai.model.function.FunctionCallbackWrapper;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * AI Tools for Lead operations.
@@ -35,15 +43,18 @@ public class LeadTools {
 
     private final LeadService leadService;
     private final ToolExecutionService toolExecutionService;
+    private final ConversationRepository conversationRepository;
     private final ObjectMapper objectMapper;
 
     public LeadTools(
             LeadService leadService,
             ToolExecutionService toolExecutionService,
+            ConversationRepository conversationRepository,
             ObjectMapper objectMapper
     ) {
         this.leadService = leadService;
         this.toolExecutionService = toolExecutionService;
+        this.conversationRepository = conversationRepository;
         this.objectMapper = objectMapper;
     }
 
@@ -164,6 +175,111 @@ public class LeadTools {
                 .withName("getLead")
                 .withDescription("Retrieve detailed information about a specific CRM lead by its ID.")
                 .withInputType(GetLeadInput.class)
+                .build();
+    }
+
+    public BulkDeleteLeadsOutput requestBulkDeleteLeads(BulkDeleteLeadsInput input) {
+        LOGGER.info("LeadTools >> requestBulkDeleteLeads called with input status: {}, company: {}, ids: {}",
+                input != null ? input.getStatus() : null,
+                input != null ? input.getCompanyName() : null,
+                input != null ? input.getLeadIds() : null);
+        long startTime = System.currentTimeMillis();
+        String inputJson = serialize(input);
+
+        try {
+            List<Lead> leadsToDelete = new ArrayList<>();
+
+            if (input != null && input.getLeadIds() != null && !input.getLeadIds().isEmpty()) {
+                for (Long id : input.getLeadIds()) {
+                    ApiStatus status = leadService.viewLead(id);
+                    if (status.getLead() != null && !Boolean.TRUE.equals(status.getLead().getIsDeleted())) {
+                        leadsToDelete.add(status.getLead());
+                    }
+                }
+            } else {
+                LeadSearchRequest searchRequest = new LeadSearchRequest();
+                if (input != null) {
+                    searchRequest.setName(input.getName());
+                    searchRequest.setEmail(input.getEmail());
+                    searchRequest.setCompanyName(input.getCompanyName());
+                    if (input.getStatus() != null && !input.getStatus().isBlank()) {
+                        try {
+                            searchRequest.setStatus(LeadStatus.valueOf(input.getStatus().trim().toUpperCase()));
+                        } catch (IllegalArgumentException e) {
+                            LOGGER.warn("LeadTools >> Invalid lead status passed: {}", input.getStatus());
+                        }
+                    }
+                    searchRequest.setPageSize(100);
+                }
+                ApiStatus status = leadService.listLeads(searchRequest);
+                if (status.getLeads() != null) {
+                    leadsToDelete.addAll(status.getLeads());
+                }
+            }
+
+            if (leadsToDelete.isEmpty()) {
+                BulkDeleteLeadsOutput output = new BulkDeleteLeadsOutput(
+                        false,
+                        0,
+                        List.of(),
+                        List.of(),
+                        "No matching active leads found to delete."
+                );
+                long duration = System.currentTimeMillis() - startTime;
+                toolExecutionService.recordExecution("requestBulkDeleteLeads", inputJson, serialize(output), "SUCCESS", duration);
+                return output;
+            }
+
+            List<Long> leadIds = leadsToDelete.stream().map(Lead::getId).collect(Collectors.toList());
+            List<LeadSummary> previews = leadsToDelete.stream().map(this::mapToSummary).collect(Collectors.toList());
+
+            Long conversationId = ConversationContextHolder.getConversationId();
+            if (conversationId != null) {
+                conversationRepository.findByIdAndIsDeletedFalse(conversationId).ifPresent(conversation -> {
+                    String description = "Delete " + leadIds.size() + " leads: " +
+                            leadsToDelete.stream().map(l -> (l.getFirstName() != null ? l.getFirstName() + " " : "") +
+                                            (l.getLastName() != null ? l.getLastName() : "") + " (ID: " + l.getId() + ")")
+                                    .collect(Collectors.joining(", "));
+                    PendingActionPayload payload = new PendingActionPayload("BULK_DELETE_LEADS", leadIds.size(), leadIds, description);
+                    conversation.setPendingActionStatus(PendingActionStatus.PENDING);
+                    conversation.setPendingActionType("BULK_DELETE_LEADS");
+                    conversation.setPendingActionPayload(serialize(payload));
+                    conversation.setPendingActionDescription(description);
+                    conversation.setPendingActionCreatedOn(LocalDateTime.now());
+                    conversationRepository.save(conversation);
+                    LOGGER.info("LeadTools >> Staged pending bulk delete of {} leads on conversation {}", leadIds.size(), conversationId);
+                });
+            }
+
+            String msg = "DESTRUCTIVE ACTION WARNING: Found " + leadIds.size() + " leads matching deletion criteria. " +
+                    "Explicit two-step confirmation required. Do NOT delete yet. " +
+                    "Ask the user: 'I found " + leadIds.size() + " leads matching your request. Are you sure you want to delete them? Reply with confirm/yes to proceed or cancel/no to abort.'";
+
+            BulkDeleteLeadsOutput output = new BulkDeleteLeadsOutput(
+                    true,
+                    leadIds.size(),
+                    leadIds,
+                    previews,
+                    msg
+            );
+
+            long duration = System.currentTimeMillis() - startTime;
+            toolExecutionService.recordExecution("requestBulkDeleteLeads", inputJson, serialize(output), "SUCCESS", duration);
+            return output;
+
+        } catch (Exception e) {
+            long duration = System.currentTimeMillis() - startTime;
+            LOGGER.error("LeadTools >> requestBulkDeleteLeads failed: {}", e.getMessage(), e);
+            toolExecutionService.recordExecution("requestBulkDeleteLeads", inputJson, "Error: " + e.getMessage(), "ERROR", duration);
+            return new BulkDeleteLeadsOutput(false, 0, List.of(), List.of(), "Error requesting bulk delete: " + e.getMessage());
+        }
+    }
+
+    public FunctionCallback requestBulkDeleteLeadsFunctionCallback() {
+        return FunctionCallbackWrapper.builder((Function<BulkDeleteLeadsInput, BulkDeleteLeadsOutput>) this::requestBulkDeleteLeads)
+                .withName("requestBulkDeleteLeads")
+                .withDescription("Stage a destructive bulk deletion request for leads matching criteria (status, company name, name, or IDs). IMPORTANT: This does NOT delete immediately. It previews the count and records pending confirmation state.")
+                .withInputType(BulkDeleteLeadsInput.class)
                 .build();
     }
 

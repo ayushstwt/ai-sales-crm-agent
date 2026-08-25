@@ -48,6 +48,22 @@ public class Conversation extends BaseEntity {
     @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ConversationMessage> messages = new ArrayList<>();
 
+    @jakarta.persistence.Enumerated(jakarta.persistence.EnumType.STRING)
+    @Column(name = "pending_action_status", length = 50)
+    private PendingActionStatus pendingActionStatus = PendingActionStatus.NONE;
+
+    @Column(name = "pending_action_type", length = 100)
+    private String pendingActionType;
+
+    @Column(name = "pending_action_payload", columnDefinition = "TEXT")
+    private String pendingActionPayload;
+
+    @Column(name = "pending_action_description", columnDefinition = "TEXT")
+    private String pendingActionDescription;
+
+    @Column(name = "pending_action_created_on")
+    private LocalDateTime pendingActionCreatedOn;
+
     public Conversation() {
     }
 
@@ -137,5 +153,61 @@ public class Conversation extends BaseEntity {
 
     public void setMessages(List<ConversationMessage> messages) {
         this.messages = messages;
+    }
+
+    public PendingActionStatus getPendingActionStatus() {
+        return pendingActionStatus;
+    }
+
+    public void setPendingActionStatus(PendingActionStatus pendingActionStatus) {
+        this.pendingActionStatus = pendingActionStatus;
+    }
+
+    public String getPendingActionType() {
+        return pendingActionType;
+    }
+
+    public void setPendingActionType(String pendingActionType) {
+        this.pendingActionType = pendingActionType;
+    }
+
+    public String getPendingActionPayload() {
+        return pendingActionPayload;
+    }
+
+    public void setPendingActionPayload(String pendingActionPayload) {
+        this.pendingActionPayload = pendingActionPayload;
+    }
+
+    public String getPendingActionDescription() {
+        return pendingActionDescription;
+    }
+
+    public void setPendingActionDescription(String pendingActionDescription) {
+        this.pendingActionDescription = pendingActionDescription;
+    }
+
+    public LocalDateTime getPendingActionCreatedOn() {
+        return pendingActionCreatedOn;
+    }
+
+    public void setPendingActionCreatedOn(LocalDateTime pendingActionCreatedOn) {
+        this.pendingActionCreatedOn = pendingActionCreatedOn;
+    }
+
+    public boolean hasPendingConfirmation() {
+        return PendingActionStatus.PENDING.equals(this.pendingActionStatus);
+    }
+
+    public void clearPendingDetails() {
+        this.pendingActionType = null;
+        this.pendingActionPayload = null;
+        this.pendingActionDescription = null;
+        this.pendingActionCreatedOn = null;
+    }
+
+    public void clearPendingAction() {
+        this.pendingActionStatus = PendingActionStatus.NONE;
+        clearPendingDetails();
     }
 }

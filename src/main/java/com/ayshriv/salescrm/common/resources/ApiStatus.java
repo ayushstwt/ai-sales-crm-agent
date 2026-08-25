@@ -36,6 +36,7 @@ public class ApiStatus implements Serializable {
     private List<com.ayshriv.salescrm.task.entity.Task> tasks;
     private com.ayshriv.salescrm.activity.entity.Activity activity;
     private List<com.ayshriv.salescrm.activity.entity.Activity> activities;
+    private com.ayshriv.salescrm.customer.dto.Customer360Dto customer360;
 
     public ApiStatus() {
     }
@@ -259,5 +260,13 @@ public class ApiStatus implements Serializable {
 
     public void setActivities(List<com.ayshriv.salescrm.activity.entity.Activity> activities) {
         this.activities = activities;
+    }
+
+    public com.ayshriv.salescrm.customer.dto.Customer360Dto getCustomer360() {
+        return customer360;
+    }
+
+    public void setCustomer360(com.ayshriv.salescrm.customer.dto.Customer360Dto customer360) {
+        this.customer360 = customer360;
     }
 }

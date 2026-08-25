@@ -8,6 +8,7 @@ C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\test\j
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\test\java\com\ayshriv\salescrm\common\config\GlobalExceptionHandlerTest.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\test\java\com\ayshriv\salescrm\common\controller\TestControllerTest.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\test\java\com\ayshriv\salescrm\common\security\TenantContextServiceTest.java
+C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\test\java\com\ayshriv\salescrm\customer\controller\Customer360ControllerTest.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\test\java\com\ayshriv\salescrm\tenant\CrossTenantIsolationTest.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\test\java\com\ayshriv\salescrm\user\controller\UserControllerTest.java
 C:\Users\Dell\OneDrive\Documents\ayshriv-workspace\ai-sales-crm-agent\src\test\java\com\ayshriv\salescrm\user\service\LogServiceTest.java

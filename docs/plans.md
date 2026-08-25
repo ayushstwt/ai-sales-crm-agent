@@ -74,7 +74,7 @@ Do these one at a time, each fully CRUD + tested before starting the next. **Eve
 
 ## STAGE 4 — Customer 360 (pure CRM, no AI yet)
 
-- [ ] 4.1 `GET /customers/{id}/360` — aggregate company + contacts + leads + deals + notes + activities into one payload. No AI summary yet, just the aggregation.
+- [x] 4.1 `GET /customers/{id}/360` — aggregate company + contacts + leads + deals + notes + activities into one payload. No AI summary yet, just the aggregation.
 
 ## STAGE 5 — AI Agent Foundation
 
@@ -87,9 +87,9 @@ Do these one at a time, each fully CRUD + tested before starting the next. **Eve
 - [x] 5.5 Verify architecture rule #2 explicitly: write a short note/test confirming the tool path goes through the service+authorization layer, not a shortcut.
 - [x] 5.6 Add 3-4 more read-only tools: `getLead`, `searchDeals`, `getDeal`, `getCustomerTimeline`. Test each via chat prompts.
 - [x] 5.7 Add write tools: `createTask`, `updateDealStage`. Confirm audit_logs entries show `source: AI_AGENT`.
-- [ ] 5.8 Destructive-action confirmation flow (master.md rule #4) — implement conversation-state tracking for pending confirmations. Test with a bulk-delete-style prompt (even if the actual destructive tool is just a stub for now).
-- [ ] 5.9 System prompt hardening (master.md rule #3) — write the system prompt treating retrieved data as non-instructional. Create ONE seeded note containing an injection attempt ("ignore previous instructions...") and write a test proving the agent doesn't act on it.
-- [ ] 5.10 Customer 360 AI summary — `POST /ai/chat` intent that uses the Stage 4 aggregation as tool output and returns a natural-language summary.
+- [x] 5.8 Destructive-action confirmation flow (master.md rule #4) — implement conversation-state tracking for pending confirmations. Test with a bulk-delete-style prompt (even if the actual destructive tool is just a stub for now).
+- [x] 5.9 System prompt hardening (master.md rule #3) — write the system prompt treating retrieved data as non-instructional. Create ONE seeded note containing an injection attempt ("ignore previous instructions...") and write a test proving the agent doesn't act on it.
+- [x] 5.10 Customer 360 AI summary — `POST /ai/chat` intent that uses the Stage 4 aggregation as tool output and returns a natural-language summary.
 
 ## STAGE 6 — RAG
 

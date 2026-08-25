@@ -7,11 +7,14 @@ com\ayshriv\salescrm\ai\service\impl\AzureOpenAIProvider.class
 com\ayshriv\salescrm\common\resources\Constants.class
 com\ayshriv\salescrm\audit\entity\AuditSource.class
 com\ayshriv\salescrm\ai\tool\ActivityTools.class
+com\ayshriv\salescrm\ai\context\ConversationContextHolder.class
+com\ayshriv\salescrm\customer\dto\Customer360Dto.class
 com\ayshriv\salescrm\ai\tool\dto\CreateTaskInput.class
 com\ayshriv\salescrm\user\controller\LogController.class
 com\ayshriv\salescrm\contact\dto\ContactSearchRequest.class
 com\ayshriv\salescrm\auth\dto\LoginRequest.class
 com\ayshriv\salescrm\auth\service\impl\AuthServiceImpl.class
+com\ayshriv\salescrm\ai\dto\PendingActionPayload.class
 com\ayshriv\salescrm\ai\tool\dto\CustomerTimelineInput.class
 com\ayshriv\salescrm\user\service\impl\LogServiceImpl.class
 com\ayshriv\salescrm\user\repository\RoleRepository.class
@@ -19,6 +22,7 @@ com\ayshriv\salescrm\common\config\JacksonConfig.class
 com\ayshriv\salescrm\common\config\GlobalExceptionHandler.class
 com\ayshriv\salescrm\activity\dto\ActivityCreateRequest.class
 com\ayshriv\salescrm\task\dto\TaskUpdateRequest.class
+com\ayshriv\salescrm\customer\dto\Customer360SummaryDto.class
 com\ayshriv\salescrm\ai\dto\ToolCallDto.class
 com\ayshriv\salescrm\ai\tool\dto\GetLeadOutput.class
 com\ayshriv\salescrm\user\service\UserService.class
@@ -72,6 +76,8 @@ com\ayshriv\salescrm\user\dto\UserUpdateRequest.class
 com\ayshriv\salescrm\user\repository\UserLogRepository.class
 com\ayshriv\salescrm\auth\dto\ForgotPasswordRequest.class
 com\ayshriv\salescrm\company\controller\CompanyController.class
+com\ayshriv\salescrm\customer\service\impl\Customer360ServiceImpl.class
+com\ayshriv\salescrm\ai\tool\dto\BulkDeleteLeadsOutput.class
 com\ayshriv\salescrm\ai\tool\dto\CreateTaskOutput.class
 com\ayshriv\salescrm\user\entity\UserLog.class
 com\ayshriv\salescrm\auth\dto\RegisterRequest.class
@@ -99,6 +105,8 @@ com\ayshriv\salescrm\ai\tool\dto\UpdateDealStageOutput.class
 com\ayshriv\salescrm\contact\controller\ContactController.class
 com\ayshriv\salescrm\contact\service\ContactService.class
 com\ayshriv\salescrm\ai\service\ToolExecutionService.class
+com\ayshriv\salescrm\customer\service\Customer360Service.class
+com\ayshriv\salescrm\customer\dto\GetCustomer360Output.class
 com\ayshriv\salescrm\organization\entity\Organization.class
 com\ayshriv\salescrm\deal\controller\DealController.class
 com\ayshriv\salescrm\user\entity\UserType.class
@@ -106,6 +114,7 @@ com\ayshriv\salescrm\ai\tool\dto\SearchDealsOutput.class
 com\ayshriv\salescrm\common\security\UserPrincipal.class
 com\ayshriv\salescrm\activity\dto\ActivitySearchRequest.class
 com\ayshriv\salescrm\ai\entity\ToolExecution.class
+com\ayshriv\salescrm\ai\tool\dto\BulkDeleteLeadsInput.class
 com\ayshriv\salescrm\common\security\impl\TenantContextServiceImpl.class
 com\ayshriv\salescrm\deal\service\DealService.class
 com\ayshriv\salescrm\user\entity\Role.class
@@ -116,13 +125,17 @@ com\ayshriv\salescrm\deal\dto\DealMoveStageRequest.class
 com\ayshriv\salescrm\user\service\LogService.class
 com\ayshriv\salescrm\audit\service\AuditLogService.class
 com\ayshriv\salescrm\contact\service\impl\ContactServiceImpl.class
+com\ayshriv\salescrm\ai\entity\PendingActionStatus.class
 com\ayshriv\salescrm\lead\dto\LeadCreateRequest.class
+com\ayshriv\salescrm\ai\tool\Customer360Tools.class
+com\ayshriv\salescrm\customer\dto\GetCustomer360Input.class
 com\ayshriv\salescrm\auth\dto\ResetPasswordRequest.class
 com\ayshriv\salescrm\lead\dto\LeadSearchRequest.class
 com\ayshriv\salescrm\pipeline\entity\Pipeline.class
 com\ayshriv\salescrm\ai\entity\Conversation.class
 com\ayshriv\salescrm\common\resources\ApiStatus.class
 com\ayshriv\salescrm\task\dto\TaskCreateRequest.class
+com\ayshriv\salescrm\customer\controller\Customer360Controller.class
 com\ayshriv\salescrm\task\dto\TaskSearchRequest.class
 com\ayshriv\salescrm\lead\entity\Lead.class
 com\ayshriv\salescrm\ai\tool\DealTools.class

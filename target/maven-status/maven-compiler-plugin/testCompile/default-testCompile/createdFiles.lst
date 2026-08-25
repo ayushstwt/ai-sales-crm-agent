@@ -6,6 +6,7 @@ com\ayshriv\salescrm\ai\controller\AiChatControllerTest.class
 com\ayshriv\salescrm\common\config\GlobalExceptionHandlerTest.class
 com\ayshriv\salescrm\common\controller\TestControllerTest.class
 com\ayshriv\salescrm\audit\controller\AuditLogControllerTest.class
+com\ayshriv\salescrm\customer\controller\Customer360ControllerTest.class
 com\ayshriv\salescrm\tenant\CrossTenantIsolationTest.class
 com\ayshriv\salescrm\user\service\LogServiceTest.class
 com\ayshriv\salescrm\ai\service\OpenAIProviderTest.class
